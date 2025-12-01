@@ -149,9 +149,15 @@ export const db = {
     }
 
     try {
+      // Normalize username to lowercase
+      const normalizedData = {
+        ...data,
+        username: data.username.trim().toLowerCase(),
+      };
+      
       const { data: session, error } = await supabase
         .from('user_sessions')
-        .insert(data)
+        .insert(normalizedData)
         .select()
         .single();
       if (error) throw error;
@@ -168,12 +174,15 @@ export const db = {
       return true;
     }
 
+    // Normalize username to lowercase for consistent matching
+    const normalizedUsername = username.trim().toLowerCase();
+
     try {
       
       const { data, error } = await supabase
         .from('user_sessions')
         .update({ is_active: false })
-        .eq('username', username)
+        .ilike('username', normalizedUsername)
         .select();
       
       if (error) {
@@ -194,11 +203,14 @@ export const db = {
       return true;
     }
 
+    // Normalize username to lowercase for consistent matching
+    const normalizedUsername = username.trim().toLowerCase();
+
     try {
       const { data: sessions, error } = await supabase
         .from('user_sessions')
         .select('*')
-        .eq('username', username)
+        .ilike('username', normalizedUsername)
         .eq('is_active', true)
         .order('created_at', { ascending: false })
         .limit(1);
