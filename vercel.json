@@ -2,11 +2,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "functions": {
-    "api/ictu/[...path].ts": {
-      "runtime": "edge"
-    }
-  },
   "rewrites": [
     {
       "source": "/ionline/:path*",
