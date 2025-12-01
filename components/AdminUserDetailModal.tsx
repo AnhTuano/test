@@ -140,15 +140,9 @@ const AdminUserDetailModal: React.FC<AdminUserDetailModalProps> = ({ username, o
                              </div>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-4">
-                              <div className="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl text-center">
-                                  <div className="text-2xl font-bold text-slate-900 dark:text-white">{data.loginHistory.length}</div>
-                                  <div className="text-xs text-slate-500">Lần đăng nhập</div>
-                              </div>
-                              <div className="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl text-center">
-                                  <div className="text-2xl font-bold text-slate-900 dark:text-white">{data.academicOverview.totalTests}</div>
-                                  <div className="text-xs text-slate-500">Bài kiểm tra</div>
-                              </div>
+                          <div className="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl text-center">
+                              <div className="text-2xl font-bold text-slate-900 dark:text-white">{data.loginHistory.length}</div>
+                              <div className="text-xs text-slate-500">Lần đăng nhập</div>
                           </div>
                        </div>
                     </div>
