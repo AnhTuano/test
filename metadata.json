@@ -1,0 +1,5 @@
+{
+  "name": "Xem điểm",
+  "description": "A comprehensive dashboard for students to view course grades, weekly progress, and detailed test results with data visualization.",
+  "requestFramePermissions": []
+}
