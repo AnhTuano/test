@@ -176,16 +176,12 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
                 const questionNum = q.question_number > 0 ? q.question_number : idx + 1;
                 
                 const options = q.answer_option.map(opt => {
-                    // Đáp án đúng: id = 1 hoặc id = 'a'
-                    const isCorrect = opt.id === '1' || opt.id === 1 || String(opt.id).toLowerCase() === 'a';
                     const optionLetter = idToLetter(opt.id);
                     
                     return new Paragraph({
                         children: [
                             new TextRun({ 
-                                text: `${optionLetter}. ${stripHtml(opt.value)} ${isCorrect ? '(Đáp án đúng)' : ''}`,
-                                bold: isCorrect,
-                                color: isCorrect ? "008000" : "000000"
+                                text: `${optionLetter}. ${stripHtml(opt.value)}`,
                             })
                         ],
                         indent: { left: 720 }, // Indent options
@@ -385,24 +381,16 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
                             
                             <div className="space-y-3 pl-0 md:pl-12">
                                 {q.answer_option.map((opt, optIdx) => {
-                                    // Đáp án đúng: id = 1 hoặc id = 'a' hoặc id = 'A'
-                                    const isCorrect = opt.id === '1' || opt.id === 1 || opt.id.toLowerCase() === 'a';
                                     // Chuyển id thành chữ cái
                                     const optionLetter = idToLetter(opt.id);
                                     
                                     return (
                                         <div 
                                             key={opt.id} 
-                                            className={`relative group p-4 rounded-xl text-sm border transition-all duration-200 flex items-center justify-between
-                                            ${isCorrect 
-                                                ? 'bg-emerald-50/60 dark:bg-emerald-900/30 border-emerald-500/30 text-emerald-900 dark:text-emerald-200 font-medium ring-1 ring-emerald-500/20' 
-                                                : 'bg-white dark:bg-slate-700/50 border-slate-100 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700'
-                                            }`}
+                                            className="relative group p-4 rounded-xl text-sm border transition-all duration-200 flex items-center justify-between bg-white dark:bg-slate-700/50 border-slate-100 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700"
                                         >
                                             <div className="flex items-center gap-4">
-                                                <div className={`w-7 h-7 rounded-full flex items-center justify-center border text-xs font-bold transition-colors flex-shrink-0
-                                                    ${isCorrect ? 'bg-emerald-500 border-emerald-500 text-white' : 'bg-slate-50 dark:bg-slate-600 border-slate-200 dark:border-slate-500 text-slate-500 dark:text-slate-200 group-hover:border-slate-300'}
-                                                `}>
+                                                <div className="w-7 h-7 rounded-full flex items-center justify-center border text-xs font-bold transition-colors flex-shrink-0 bg-slate-50 dark:bg-slate-600 border-slate-200 dark:border-slate-500 text-slate-500 dark:text-slate-200 group-hover:border-slate-300">
                                                     {optionLetter}
                                                 </div>
                                                 {/* Render answer HTML content */}
@@ -411,7 +399,6 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
                                                     dangerouslySetInnerHTML={{ __html: processHtmlContent(opt.value) }}
                                                 />
                                             </div>
-                                            {isCorrect && <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0" />}
                                         </div>
                                     );
                                 })}
