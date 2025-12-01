@@ -13,9 +13,6 @@ import {
   Activity, Award
 } from 'lucide-react';
 
-// Default secret key (fallback if not set in settings)
-const DEFAULT_ADMIN_SECRET_KEY = 'ictu2025admin';
-
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState(''); 
@@ -24,18 +21,12 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [systemSettings, setSystemSettings] = useState<any>(null);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const [isAdminAccess, setIsAdminAccess] = useState(false);
 
   const { login, isLoggedIn, logoutMessage, clearLogoutMessage, role } = useAuth();
   const toast = useToast();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  
-  // Secret admin access: /login?key=<adminSecretKey>
-  // Only check after settings are loaded to use the correct key from database
-  const urlKey = searchParams.get('key');
-  const isAdminAccess = settingsLoaded && urlKey && (
-    urlKey === (systemSettings?.adminSecretKey || DEFAULT_ADMIN_SECRET_KEY)
-  );
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -52,6 +43,16 @@ const Login: React.FC = () => {
       setSettingsLoaded(true);
     });
   }, []);
+
+  // Verify admin secret key from URL against database
+  useEffect(() => {
+    const urlKey = searchParams.get('key');
+    if (urlKey && settingsLoaded) {
+      api.verifyAdminSecretKey(urlKey).then(isValid => {
+        setIsAdminAccess(isValid);
+      });
+    }
+  }, [searchParams, settingsLoaded]);
 
   const handleGoogleLogin = () => {
     if (!isGoogleAuthConfigured()) {

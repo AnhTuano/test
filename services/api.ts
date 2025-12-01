@@ -1100,6 +1100,18 @@ export const api = {
     };
   },
 
+  // Verify admin secret key for maintenance mode login
+  verifyAdminSecretKey: async (key: string): Promise<boolean> => {
+    try {
+      const settings = await api.adminGetSettings();
+      const adminSecretKey = settings.adminSecretKey || 'ictu2025admin';
+      return key === adminSecretKey;
+    } catch (error) {
+      console.error('Error verifying admin key:', error);
+      return false;
+    }
+  },
+
   getPopupNotification: async (): Promise<PopupNotification> => {
     const defaultNotif: PopupNotification = {
       id: "notif-default",
