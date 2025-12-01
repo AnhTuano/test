@@ -266,7 +266,7 @@
                   window.opener.sessionStorage.setItem('oauth_provider', provider);
                 }
                 // Navigate parent to callback
-                window.opener.location.href = window.opener.location.origin + '/#/auth/callback';
+                window.opener.location.href = window.opener.location.origin + '/auth/callback';
                 window.close();
               } catch (e) {
                 // Cross-origin issue, fallback
@@ -281,7 +281,7 @@
                 sessionStorage.setItem(errorKey, error);
                 sessionStorage.setItem('oauth_provider', provider);
               }
-              window.location.replace('/#/auth/callback');
+              window.location.replace('/auth/callback');
             }
             return; // Stop further execution
           }
