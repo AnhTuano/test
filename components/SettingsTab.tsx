@@ -59,6 +59,10 @@ const SettingsTab: React.FC = () => {
     setSettings(prev => prev ? {...prev, contactEmail: e.target.value} : prev);
   }, []);
 
+  const handleCopyrightChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSettings(prev => prev ? {...prev, copyrightText: e.target.value} : prev);
+  }, []);
+
   const handleSaveSettings = useCallback(async () => {
     if (settings) {
       setSaveStatus('loading');
@@ -152,6 +156,14 @@ const SettingsTab: React.FC = () => {
                     onChange={handleContactEmailChange}
                     icon={Mail}
                     placeholder="support@ictu.edu.vn"
+                />
+                <SettingInput 
+                    id="copyrightText"
+                    label="Copyright (Footer)" 
+                    value={settings.copyrightText || ''} 
+                    onChange={handleCopyrightChange}
+                    icon={Type}
+                    placeholder="© 2025 ICTU Student Portal"
                 />
                 
                 <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">

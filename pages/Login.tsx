@@ -23,6 +23,8 @@ const Login: React.FC = () => {
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   
   const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [secretClickCount, setSecretClickCount] = useState(0);
+  const secretClickTimer = React.useRef<NodeJS.Timeout | null>(null);
 
   const { login, isLoggedIn, logoutMessage, clearLogoutMessage, role } = useAuth();
   const toast = useToast();
@@ -43,6 +45,37 @@ const Login: React.FC = () => {
       setSettingsLoaded(true);
     });
   }, []);
+
+  // Secret admin login: click copyright 5 times within 3 seconds
+  const handleSecretClick = () => {
+    // Only works in maintenance mode
+    if (!systemSettings?.maintenanceMode) return;
+    
+    setSecretClickCount(prev => {
+      const newCount = prev + 1;
+      
+      // Clear existing timer
+      if (secretClickTimer.current) {
+        clearTimeout(secretClickTimer.current);
+      }
+      
+      // Set new timer to reset count after 3 seconds
+      secretClickTimer.current = setTimeout(() => {
+        setSecretClickCount(0);
+      }, 3000);
+      
+      // After 5 clicks, show admin login
+      if (newCount >= 5) {
+        setShowAdminLogin(true);
+        setSecretClickCount(0);
+        if (secretClickTimer.current) {
+          clearTimeout(secretClickTimer.current);
+        }
+      }
+      
+      return newCount;
+    });
+  };
 
   const handleGoogleLogin = () => {
     if (!isGoogleAuthConfigured()) {
@@ -259,11 +292,12 @@ const Login: React.FC = () => {
                     {systemSettings?.maintenanceMode && (
                         <div className="p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/50 rounded-xl flex items-start gap-3">
                             <Shield className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                            <p className="text-sm font-medium text-blue-900 dark:text-blue-200">Hệ thống đang bảo trì kỹ thuật.</p>
+                            <p className="text-sm font-medium text-blue-900 dark:text-blue-200">Hệ thống đang bảo trì kỹ thuật. Chỉ Admin có thể đăng nhập.</p>
                         </div>
                     )}
 
-                    {!systemSettings?.disableStandardLogin || showAdminLogin ? (
+                    {/* Login Form - Hide when maintenance mode is ON (except for admin login) */}
+                    {(!systemSettings?.maintenanceMode || showAdminLogin) && (!systemSettings?.disableStandardLogin || showAdminLogin) ? (
                         <form onSubmit={handleSubmit} className="space-y-6">
                             
                             <div className="space-y-4">
@@ -333,46 +367,67 @@ const Login: React.FC = () => {
                         </div>
                     )}
 
-                    <div className="relative py-2">
-                        <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-100 dark:border-slate-800"></div></div>
-                        <div className="relative flex justify-center"><span className="bg-white dark:bg-slate-950 px-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Hoặc đăng nhập với</span></div>
-                    </div>
+                    {/* SSO Buttons - Hide when maintenance mode is ON */}
+                    {!systemSettings?.maintenanceMode && (
+                      <>
+                        <div className="relative py-2">
+                            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-100 dark:border-slate-800"></div></div>
+                            <div className="relative flex justify-center"><span className="bg-white dark:bg-slate-950 px-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Hoặc đăng nhập với</span></div>
+                        </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <button 
-                            type="button" 
-                            onClick={handleGoogleLogin}
-                            className="flex items-center justify-center gap-3 h-12 border border-slate-200 dark:border-slate-800 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900 transition-all font-bold text-sm text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 group active:scale-95"
-                        >
-                            <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
-                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                            </svg>
-                            Google
-                        </button>
-                        <button 
-                            type="button" 
-                            onClick={handleMicrosoftLogin}
-                            className="flex items-center justify-center gap-3 h-12 border border-slate-200 dark:border-slate-800 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900 transition-all font-bold text-sm text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 group active:scale-95"
-                        >
-                            <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 21 21">
-                                <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
-                                <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
-                                <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
-                                <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
-                            </svg>
-                            Microsoft
-                        </button>
-                    </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <button 
+                                type="button" 
+                                onClick={handleGoogleLogin}
+                                className="flex items-center justify-center gap-3 h-12 border border-slate-200 dark:border-slate-800 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900 transition-all font-bold text-sm text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 group active:scale-95"
+                            >
+                                <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+                                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                                </svg>
+                                Google
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={handleMicrosoftLogin}
+                                className="flex items-center justify-center gap-3 h-12 border border-slate-200 dark:border-slate-800 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-900 transition-all font-bold text-sm text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 group active:scale-95"
+                            >
+                                <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 21 21">
+                                    <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+                                    <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+                                    <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+                                    <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+                                </svg>
+                                Microsoft
+                            </button>
+                        </div>
+                      </>
+                    )}
                  </>
               )}
               
               <div className="pt-6 text-center">
-                  <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">
+                  <p 
+                    className={`text-xs font-semibold text-slate-400 dark:text-slate-500 select-none ${systemSettings?.maintenanceMode ? 'cursor-default' : ''}`}
+                    onClick={handleSecretClick}
+                  >
                     {systemSettings?.copyrightText || "© 2025 ICTU Student Portal. Powered by React."}
                   </p>
+                  {/* Visual feedback for secret clicks (only in maintenance mode) */}
+                  {systemSettings?.maintenanceMode && secretClickCount > 0 && secretClickCount < 5 && (
+                    <div className="mt-2 flex justify-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <div 
+                          key={i} 
+                          className={`w-1.5 h-1.5 rounded-full transition-all duration-200 ${
+                            i < secretClickCount ? 'bg-blue-500 scale-110' : 'bg-slate-200 dark:bg-slate-700'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
               </div>
           </div>
       </div>
