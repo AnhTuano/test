@@ -1,5 +1,6 @@
 import { ClassStudent, ClassDetails, CoursePlan, TestResultData, UserProfile, UserRole, SystemSettings, PopupNotification, LoginActivity, StudentProgress, SecurityStats, SecurityLog, AdminUserDetailedStats } from '../types';
 import { getRequestSignature, APP_ID } from '../utils/requestSignature';
+import { getClientIP } from '../utils/getClientIP';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -249,11 +250,14 @@ export const api = {
           
           await supabaseDb.invalidateAllUserSessions(profile.username);
           
+          // Get real client IP
+          const clientIP = await getClientIP();
+          
           await supabaseDb.createSession({
             username: profile.username,
             session_id: sessionId,
             device_fingerprint: localStorage.getItem('device_fingerprint') || undefined,
-            ip_address: '127.0.0.1',
+            ip_address: clientIP,
             user_agent: navigator.userAgent,
           });
           
@@ -360,11 +364,15 @@ export const api = {
             expiresAt.setDate(expiresAt.getDate() + 7);
             
             await supabaseDb.invalidateAllUserSessions(studentCode.toLowerCase());
+            
+            // Get real client IP
+            const clientIP = await getClientIP();
+            
             await supabaseDb.createSession({
               username: studentCode.toLowerCase(),
               session_id: sessionId,
               device_fingerprint: 'google-oauth',
-              ip_address: '127.0.0.1',
+              ip_address: clientIP,
               user_agent: navigator.userAgent,
               expires_at: expiresAt.toISOString(),
             });
@@ -476,11 +484,15 @@ export const api = {
             expiresAt.setDate(expiresAt.getDate() + 7);
             
             await supabaseDb.invalidateAllUserSessions(studentCode.toLowerCase());
+            
+            // Get real client IP
+            const clientIP = await getClientIP();
+            
             await supabaseDb.createSession({
               username: studentCode.toLowerCase(),
               session_id: sessionId,
               device_fingerprint: 'microsoft-oauth',
-              ip_address: '127.0.0.1',
+              ip_address: clientIP,
               user_agent: navigator.userAgent,
               expires_at: expiresAt.toISOString(),
             });

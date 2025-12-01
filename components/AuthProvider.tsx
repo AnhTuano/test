@@ -8,6 +8,7 @@ import {
   clearDeviceFingerprint,
   getDeviceInfo 
 } from '../utils/deviceManager';
+import { getClientIP } from '../utils/getClientIP';
 import { APP_VERSION } from '../utils/requestSignature';
 import { GoogleUser, extractStudentCode, inferStudentInfo } from '../services/googleAuth';
 import { MicrosoftUser, extractStudentCode as msExtractStudentCode, inferStudentInfo as msInferStudentInfo } from '../services/microsoftAuth';
@@ -264,18 +265,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLogoutMessage(null);
 
       // Log Activity with device fingerprint
-      api.logLoginActivity({
-          username: userProfile.username,
-          studentName: userProfile.full_name,
-          className: userProfile.class_name,
-          department: userProfile.department,
-          ip_address: '127.0.0.1',
-          device: `${devInfo.device} - ${devInfo.browser}`,
-          browser: devInfo.browser,
-          userAgent: navigator.userAgent,
-          deviceFingerprint: fingerprint,
-          sessionId: sessionId
-      }).catch(console.error);
+      getClientIP().then(clientIP => {
+        api.logLoginActivity({
+            username: userProfile.username,
+            studentName: userProfile.full_name,
+            className: userProfile.class_name,
+            department: userProfile.department,
+            ip_address: clientIP,
+            device: `${devInfo.device} - ${devInfo.browser}`,
+            browser: devInfo.browser,
+            userAgent: navigator.userAgent,
+            deviceFingerprint: fingerprint,
+            sessionId: sessionId
+        }).catch(console.error);
+      });
 
     } catch (err: any) {
       
@@ -388,19 +391,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLogoutMessage(null);
 
       // Log Activity with device fingerprint
-      api.logLoginActivity({
-        username: username,
-        studentName: userProfile.full_name,
-        className: userProfile.class_name || '',
-        department: userProfile.department || '',
-        ip_address: '127.0.0.1',
-        device: `${devInfo.device} - ${devInfo.browser}`,
-        browser: devInfo.browser,
-        userAgent: navigator.userAgent,
-        deviceFingerprint: fingerprint,
-        sessionId: sessionId,
-        loginMethod: 'google'
-      }).catch(console.error);
+      getClientIP().then(clientIP => {
+        api.logLoginActivity({
+          username: username,
+          studentName: userProfile.full_name,
+          className: userProfile.class_name || '',
+          department: userProfile.department || '',
+          ip_address: clientIP,
+          device: `${devInfo.device} - ${devInfo.browser}`,
+          browser: devInfo.browser,
+          userAgent: navigator.userAgent,
+          deviceFingerprint: fingerprint,
+          sessionId: sessionId,
+          loginMethod: 'google'
+        }).catch(console.error);
+      });
 
     } catch (err: any) {
       
@@ -494,19 +499,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLogoutMessage(null);
 
       // Log Activity with device fingerprint
-      api.logLoginActivity({
-        username: username,
-        studentName: userProfile.full_name,
-        className: userProfile.class_name || '',
-        department: userProfile.department || '',
-        ip_address: '127.0.0.1',
-        device: `${devInfo.device} - ${devInfo.browser}`,
-        browser: devInfo.browser,
-        userAgent: navigator.userAgent,
-        deviceFingerprint: fingerprint,
-        sessionId: sessionId,
-        loginMethod: 'microsoft'
-      }).catch(console.error);
+      getClientIP().then(clientIP => {
+        api.logLoginActivity({
+          username: username,
+          studentName: userProfile.full_name,
+          className: userProfile.class_name || '',
+          department: userProfile.department || '',
+          ip_address: clientIP,
+          device: `${devInfo.device} - ${devInfo.browser}`,
+          browser: devInfo.browser,
+          userAgent: navigator.userAgent,
+          deviceFingerprint: fingerprint,
+          sessionId: sessionId,
+          loginMethod: 'microsoft'
+        }).catch(console.error);
+      });
 
     } catch (err: any) {
       
