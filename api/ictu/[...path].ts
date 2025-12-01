@@ -5,6 +5,19 @@ export const config = {
 const ICTU_BASE_URL = 'https://apps.ictu.edu.vn:9087';
 
 export default async function handler(request: Request) {
+  // Handle CORS preflight
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-APP-ID, x-request-signature',
+        'Access-Control-Max-Age': '86400',
+      },
+    });
+  }
+
   const url = new URL(request.url);
   
   // Get the actual API path from the URL
