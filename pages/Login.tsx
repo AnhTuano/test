@@ -20,6 +20,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [systemSettings, setSystemSettings] = useState<any>(null);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
   
   const [showAdminLogin, setShowAdminLogin] = useState(false);
 
@@ -35,7 +36,12 @@ const Login: React.FC = () => {
   }, [isLoggedIn, navigate, role]);
 
   useEffect(() => {
-    api.getPublicSettings().then(setSystemSettings).catch(() => {});
+    api.getPublicSettings().then(settings => {
+      setSystemSettings(settings);
+      setSettingsLoaded(true);
+    }).catch(() => {
+      setSettingsLoaded(true);
+    });
   }, []);
 
   const handleGoogleLogin = () => {
@@ -114,6 +120,15 @@ const Login: React.FC = () => {
   const currentMessage = error || logoutMessage;
   const isBlockedState = isBlocked(currentMessage);
   const isConcurrentState = isConcurrentLogin(currentMessage);
+
+  // Wait for settings to load before showing the form
+  if (!settingsLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-950">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex w-full bg-white dark:bg-slate-950 transition-colors duration-300 overflow-hidden">

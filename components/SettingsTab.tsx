@@ -45,7 +45,21 @@ const SettingsTab: React.FC = () => {
     api.adminGetSettings().then(setSettings).catch(console.error);
   }, []);
 
-  const handleSaveSettings = async () => {
+  // Use useCallback to prevent onChange handlers from being recreated
+  // MUST be before any conditional returns to follow Rules of Hooks
+  const handlePortalNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSettings(prev => prev ? {...prev, portalName: e.target.value} : prev);
+  }, []);
+
+  const handleDashboardTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSettings(prev => prev ? {...prev, dashboardTitle: e.target.value} : prev);
+  }, []);
+
+  const handleContactEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSettings(prev => prev ? {...prev, contactEmail: e.target.value} : prev);
+  }, []);
+
+  const handleSaveSettings = useCallback(async () => {
     if (settings) {
       setSaveStatus('loading');
       try {
@@ -58,9 +72,9 @@ const SettingsTab: React.FC = () => {
         setSaveStatus('idle');
       }
     }
-  };
+  }, [settings, toast]);
 
-  const handleFactoryReset = async () => {
+  const handleFactoryReset = useCallback(async () => {
     if (!confirm("Khôi phục cài đặt gốc? Mọi thay đổi sẽ bị mất.")) return;
     setSaveStatus('loading');
     const defaultSettings: SystemSettings = {
@@ -81,36 +95,26 @@ const SettingsTab: React.FC = () => {
         toast.error("Lỗi khi khôi phục");
         setSaveStatus('idle');
     }
-  };
+  }, [toast]);
 
-  const insertFormatting = (startTag: string, endTag: string) => {
-    if (!messageInputRef.current || !settings) return;
-    const textarea = messageInputRef.current;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const text = settings.disableLoginMessage;
-    const newText = text.substring(0, start) + startTag + text.substring(start, end) + endTag + text.substring(end);
-    setSettings({...settings, disableLoginMessage: newText});
-    setTimeout(() => {
-        textarea.focus();
-        textarea.setSelectionRange(start + startTag.length, end + startTag.length);
-    }, 0);
-  };
+  const insertFormatting = useCallback((startTag: string, endTag: string) => {
+    if (!messageInputRef.current) return;
+    setSettings(prev => {
+      if (!prev) return prev;
+      const textarea = messageInputRef.current!;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = prev.disableLoginMessage;
+      const newText = text.substring(0, start) + startTag + text.substring(start, end) + endTag + text.substring(end);
+      setTimeout(() => {
+          textarea.focus();
+          textarea.setSelectionRange(start + startTag.length, end + startTag.length);
+      }, 0);
+      return {...prev, disableLoginMessage: newText};
+    });
+  }, []);
 
   if (!settings) return <div className="p-8 text-center text-slate-400 flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 animate-spin" /></div>;
-
-  // Use useCallback to prevent onChange handlers from being recreated
-  const handlePortalNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSettings(prev => prev ? {...prev, portalName: e.target.value} : prev);
-  }, []);
-
-  const handleDashboardTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSettings(prev => prev ? {...prev, dashboardTitle: e.target.value} : prev);
-  }, []);
-
-  const handleContactEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSettings(prev => prev ? {...prev, contactEmail: e.target.value} : prev);
-  }, []);
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">

@@ -387,15 +387,15 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
                                     return (
                                         <div 
                                             key={opt.id} 
-                                            className="relative group p-4 rounded-xl text-sm border transition-all duration-200 flex items-center justify-between bg-white dark:bg-slate-700/50 border-slate-100 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700"
+                                            className="relative group p-4 rounded-xl text-sm border transition-all duration-200 flex items-center justify-between bg-white dark:bg-slate-700/50 border-slate-100 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700"
                                         >
                                             <div className="flex items-center gap-4">
-                                                <div className="w-7 h-7 rounded-full flex items-center justify-center border text-xs font-bold transition-colors flex-shrink-0 bg-slate-50 dark:bg-slate-600 border-slate-200 dark:border-slate-500 text-slate-500 dark:text-slate-200 group-hover:border-slate-300">
+                                                <div className="w-7 h-7 rounded-full flex items-center justify-center border text-xs font-bold transition-colors flex-shrink-0 bg-slate-50 dark:bg-slate-600 border-slate-200 dark:border-slate-500 text-slate-500 dark:text-slate-100 group-hover:border-slate-300">
                                                     {optionLetter}
                                                 </div>
                                                 {/* Render answer HTML content */}
-                                                <div 
-                                                    className="leading-snug prose prose-sm dark:prose-invert max-w-none prose-p:my-0 prose-img:max-w-[200px] prose-img:h-auto prose-img:my-1 text-slate-700 dark:text-slate-200"
+                                                <span 
+                                                    className="leading-snug text-slate-700 dark:!text-slate-100"
                                                     dangerouslySetInnerHTML={{ __html: processHtmlContent(opt.value) }}
                                                 />
                                             </div>
