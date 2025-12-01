@@ -31,8 +31,11 @@ const Login: React.FC = () => {
   const [searchParams] = useSearchParams();
   
   // Secret admin access: /login?key=<adminSecretKey>
-  const secretKey = systemSettings?.adminSecretKey || DEFAULT_ADMIN_SECRET_KEY;
-  const isAdminAccess = searchParams.get('key') === secretKey;
+  // Only check after settings are loaded to use the correct key from database
+  const urlKey = searchParams.get('key');
+  const isAdminAccess = settingsLoaded && urlKey && (
+    urlKey === (systemSettings?.adminSecretKey || DEFAULT_ADMIN_SECRET_KEY)
+  );
 
   useEffect(() => {
     if (isLoggedIn) {
