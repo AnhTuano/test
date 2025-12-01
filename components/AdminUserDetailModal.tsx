@@ -139,7 +139,9 @@ const AdminUserDetailModal: React.FC<AdminUserDetailModalProps> = ({ username, o
                              <div className="flex justify-between border-b border-slate-50 dark:border-slate-800 pb-2">
                                 <span className="text-slate-500 dark:text-slate-400">Ngày sinh</span>
                                 <span className="font-medium text-slate-900 dark:text-white">
-                                   {data.user.birthday ? new Date(data.user.birthday).toLocaleDateString('vi-VN') : 'N/A'}
+                                   {data.user.birthday && !isNaN(new Date(data.user.birthday).getTime()) 
+                                     ? new Date(data.user.birthday).toLocaleDateString('vi-VN') 
+                                     : 'N/A'}
                                 </span>
                              </div>
                              <div className="flex justify-between border-b border-slate-50 dark:border-slate-800 pb-2">

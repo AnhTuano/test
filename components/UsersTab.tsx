@@ -89,7 +89,9 @@ const UsersTab: React.FC = () => {
           email: item.email || '',
           role: item.role === 'ADMIN' ? 'Quản trị viên' : 'Sinh viên',
           status: item.status === 'active' ? 'Hoạt động' : 'Đã khóa',
-          birthday: item.birthday ? new Date(item.birthday).toLocaleDateString('vi-VN') : ''
+          birthday: item.birthday && !isNaN(new Date(item.birthday).getTime()) 
+            ? new Date(item.birthday).toLocaleDateString('vi-VN') 
+            : ''
       }));
       const csvContent = [
         headers.join(','),
