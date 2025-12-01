@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 import { TestResultData } from '../types';
 import { api } from '../services/api';
+import { useAuth } from './AuthProvider';
 import TestResultCard from './TestResultCard';
 import { WeekCardSkeleton, TestResultSkeleton } from './Skeleton';
 import { Filter, XCircle, Search } from 'lucide-react';
@@ -17,6 +18,7 @@ interface TestResultsDisplayProps {
 }
 
 const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId, className }) => {
+  const { profile } = useAuth();
   const [results, setResults] = useState<TestResultData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +33,7 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // 1. Fetch All Results
+  // 1. Fetch All Results and cache to database
   useEffect(() => {
     const fetchResults = async () => {
       if (!classId) return;
@@ -40,6 +42,33 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
       try {
         const data = await api.getAllTestResultsForClass(token, classId);
         setResults(data);
+        
+        // Cache results to database for admin viewing
+        if (profile?.username && data.length > 0) {
+          const studentId = parseInt(localStorage.getItem('ictu_student_id') || '0');
+          
+          // Cache each test result to Supabase (in background)
+          data.forEach(async (test) => {
+            try {
+              const { db } = await import('../services/supabase');
+              await db.cacheTestResult({
+                username: profile.username.toLowerCase(),
+                student_id: studentId,
+                class_id: test.class_id,
+                class_name: className,
+                week: test.week,
+                test_id: test.id,
+                score: test.av,
+                total_score: test.tong_diem,
+                time_spent: test.time,
+                passed: test.passed,
+                submit_at: test.submit_at
+              });
+            } catch (e) {
+              // Silently fail - caching is not critical
+            }
+          });
+        }
       } catch (err) {
         
         setError("Không thể tải danh sách kết quả.");
@@ -48,7 +77,7 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
       }
     };
     fetchResults();
-  }, [classId, token]);
+  }, [classId, token, className, profile?.username]);
 
   // 2. Process Data: Add "attempt" number and group
   const processedResults = useMemo(() => {
