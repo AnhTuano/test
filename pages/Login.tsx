@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../components/AuthProvider';
 import { useToast } from '../components/ToastProvider';
 import { api } from '../services/api';
@@ -13,6 +13,9 @@ import {
   Activity, Award
 } from 'lucide-react';
 
+// Secret admin login key - only admin knows this
+const ADMIN_SECRET_KEY = 'ictu2025admin';
+
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState(''); 
@@ -21,14 +24,14 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [systemSettings, setSystemSettings] = useState<any>(null);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
-  
-  const [showAdminLogin, setShowAdminLogin] = useState(false);
-  const [secretClickCount, setSecretClickCount] = useState(0);
-  const secretClickTimer = React.useRef<NodeJS.Timeout | null>(null);
 
   const { login, isLoggedIn, logoutMessage, clearLogoutMessage, role } = useAuth();
   const toast = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  
+  // Secret admin access: /login?key=ictu2025admin
+  const isAdminAccess = searchParams.get('key') === ADMIN_SECRET_KEY;
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -45,37 +48,6 @@ const Login: React.FC = () => {
       setSettingsLoaded(true);
     });
   }, []);
-
-  // Secret admin login: click copyright 5 times within 3 seconds
-  const handleSecretClick = () => {
-    // Only works in maintenance mode
-    if (!systemSettings?.maintenanceMode) return;
-    
-    setSecretClickCount(prev => {
-      const newCount = prev + 1;
-      
-      // Clear existing timer
-      if (secretClickTimer.current) {
-        clearTimeout(secretClickTimer.current);
-      }
-      
-      // Set new timer to reset count after 3 seconds
-      secretClickTimer.current = setTimeout(() => {
-        setSecretClickCount(0);
-      }, 3000);
-      
-      // After 5 clicks, show admin login
-      if (newCount >= 5) {
-        setShowAdminLogin(true);
-        setSecretClickCount(0);
-        if (secretClickTimer.current) {
-          clearTimeout(secretClickTimer.current);
-        }
-      }
-      
-      return newCount;
-    });
-  };
 
   const handleGoogleLogin = () => {
     if (!isGoogleAuthConfigured()) {
@@ -292,12 +264,16 @@ const Login: React.FC = () => {
                     {systemSettings?.maintenanceMode && (
                         <div className="p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/50 rounded-xl flex items-start gap-3">
                             <Shield className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                            <p className="text-sm font-medium text-blue-900 dark:text-blue-200">Hệ thống đang bảo trì kỹ thuật. Chỉ Admin có thể đăng nhập.</p>
+                            <p className="text-sm font-medium text-blue-900 dark:text-blue-200">
+                              {isAdminAccess 
+                                ? "Chế độ bảo trì - Đăng nhập Admin" 
+                                : "Hệ thống đang bảo trì kỹ thuật. Vui lòng quay lại sau."}
+                            </p>
                         </div>
                     )}
 
-                    {/* Login Form - Hide when maintenance mode is ON (except for admin login) */}
-                    {(!systemSettings?.maintenanceMode || showAdminLogin) && (!systemSettings?.disableStandardLogin || showAdminLogin) ? (
+                    {/* Login Form - Hide when maintenance mode is ON (except for admin access via secret URL) */}
+                    {(!systemSettings?.maintenanceMode || isAdminAccess) && (!systemSettings?.disableStandardLogin || isAdminAccess) ? (
                         <form onSubmit={handleSubmit} className="space-y-6">
                             
                             <div className="space-y-4">
@@ -409,25 +385,9 @@ const Login: React.FC = () => {
               )}
               
               <div className="pt-6 text-center">
-                  <p 
-                    className={`text-xs font-semibold text-slate-400 dark:text-slate-500 select-none ${systemSettings?.maintenanceMode ? 'cursor-default' : ''}`}
-                    onClick={handleSecretClick}
-                  >
+                  <p className="text-xs font-semibold text-slate-400 dark:text-slate-500">
                     {systemSettings?.copyrightText || "© 2025 ICTU Student Portal. Powered by React."}
                   </p>
-                  {/* Visual feedback for secret clicks (only in maintenance mode) */}
-                  {systemSettings?.maintenanceMode && secretClickCount > 0 && secretClickCount < 5 && (
-                    <div className="mt-2 flex justify-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <div 
-                          key={i} 
-                          className={`w-1.5 h-1.5 rounded-full transition-all duration-200 ${
-                            i < secretClickCount ? 'bg-blue-500 scale-110' : 'bg-slate-200 dark:bg-slate-700'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  )}
               </div>
           </div>
       </div>
