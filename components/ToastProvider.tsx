@@ -61,18 +61,18 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             key={t.id}
             className={`
               pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border backdrop-blur-md min-w-[300px] max-w-sm animate-in slide-in-from-right-full duration-300
-              ${t.type === 'success' ? 'bg-white/90 dark:bg-slate-800/90 border-emerald-100 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-400' : ''}
-              ${t.type === 'error' ? 'bg-white/90 dark:bg-slate-800/90 border-red-100 dark:border-red-900/50 text-red-800 dark:text-red-400' : ''}
-              ${t.type === 'warning' ? 'bg-white/90 dark:bg-slate-800/90 border-amber-100 dark:border-amber-900/50 text-amber-800 dark:text-amber-400' : ''}
-              ${t.type === 'info' ? 'bg-white/90 dark:bg-slate-800/90 border-blue-100 dark:border-blue-900/50 text-blue-800 dark:text-blue-400' : ''}
+              ${t.type === 'success' ? 'bg-white/90 border-emerald-100 text-emerald-800' : ''}
+              ${t.type === 'error' ? 'bg-white/90 border-red-100 text-red-800' : ''}
+              ${t.type === 'warning' ? 'bg-white/90 border-amber-100 text-amber-800' : ''}
+              ${t.type === 'info' ? 'bg-white/90 border-blue-100 text-blue-800' : ''}
             `}
           >
             <div className={`
               p-1 rounded-full shrink-0
-              ${t.type === 'success' ? 'bg-emerald-100 dark:bg-emerald-900/30' : ''}
-              ${t.type === 'error' ? 'bg-red-100 dark:bg-red-900/30' : ''}
-              ${t.type === 'warning' ? 'bg-amber-100 dark:bg-amber-900/30' : ''}
-              ${t.type === 'info' ? 'bg-blue-100 dark:bg-blue-900/30' : ''}
+              ${t.type === 'success' ? 'bg-emerald-100' : ''}
+              ${t.type === 'error' ? 'bg-red-100' : ''}
+              ${t.type === 'warning' ? 'bg-amber-100' : ''}
+              ${t.type === 'info' ? 'bg-blue-100' : ''}
             `}>
               {t.type === 'success' && <CheckCircle className="w-5 h-5" />}
               {t.type === 'error' && <AlertCircle className="w-5 h-5" />}
@@ -84,7 +84,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             
             <button 
               onClick={() => removeToast(t.id)}
-              className="p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors opacity-60 hover:opacity-100"
+              className="p-1 hover:bg-black/5 rounded-full transition-colors opacity-60 hover:opacity-100"
             >
               <X className="w-4 h-4" />
             </button>

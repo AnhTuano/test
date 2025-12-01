@@ -2,12 +2,12 @@ import React from 'react';
 
 // Base Skeleton component
 export const Skeleton: React.FC<{ className?: string }> = ({ className = '' }) => (
-  <div className={`animate-pulse bg-slate-200 dark:bg-slate-800 rounded ${className}`} />
+  <div className={`animate-pulse bg-slate-200 rounded ${className}`} />
 );
 
 // Card Skeleton
 export const CardSkeleton: React.FC = () => (
-  <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800">
+  <div className="bg-white rounded-2xl p-6 border border-slate-200">
     <div className="flex items-center gap-4 mb-4">
       <Skeleton className="w-12 h-12 rounded-xl" />
       <div className="flex-1 space-y-2">
@@ -21,7 +21,7 @@ export const CardSkeleton: React.FC = () => (
 
 // Test Result Card Skeleton
 export const TestResultSkeleton: React.FC = () => (
-  <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800">
+  <div className="bg-white rounded-2xl p-5 border border-slate-200">
     <div className="flex items-start justify-between mb-4">
       <div className="space-y-2">
         <Skeleton className="h-5 w-24" />
@@ -38,7 +38,7 @@ export const TestResultSkeleton: React.FC = () => (
 
 // Week Card Skeleton
 export const WeekCardSkeleton: React.FC = () => (
-  <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800">
+  <div className="bg-white rounded-3xl p-6 border border-slate-200">
     <div className="flex items-center justify-between mb-6">
       <div className="flex items-center gap-3">
         <Skeleton className="w-12 h-12 rounded-2xl" />
@@ -58,7 +58,7 @@ export const WeekCardSkeleton: React.FC = () => (
 
 // Class Selector Skeleton
 export const ClassSelectorSkeleton: React.FC = () => (
-  <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800">
+  <div className="bg-white rounded-2xl p-4 border border-slate-200">
     <div className="flex flex-wrap gap-3">
       <Skeleton className="h-12 w-32 rounded-xl" />
       <Skeleton className="h-12 w-32 rounded-xl" />
@@ -69,7 +69,7 @@ export const ClassSelectorSkeleton: React.FC = () => (
 
 // Class Details Header Skeleton
 export const ClassDetailsSkeleton: React.FC = () => (
-  <div className="relative w-full rounded-[2rem] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-900 dark:to-slate-800 border border-slate-200 dark:border-slate-800">
+  <div className="relative w-full rounded-[2rem] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50 border border-slate-200">
     <div className="p-6 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
       <div className="max-w-2xl w-full space-y-4">
         <div className="flex gap-2">
@@ -82,7 +82,7 @@ export const ClassDetailsSkeleton: React.FC = () => (
           <Skeleton className="h-10 w-28 rounded-xl" />
         </div>
       </div>
-      <div className="w-full md:w-64 bg-white/50 dark:bg-white/5 p-6 rounded-3xl space-y-3">
+      <div className="w-full md:w-64 bg-white/50 p-6 rounded-3xl space-y-3">
         <Skeleton className="h-3 w-32" />
         <Skeleton className="h-6 w-full" />
         <Skeleton className="h-5 w-40 rounded-lg" />
@@ -93,7 +93,7 @@ export const ClassDetailsSkeleton: React.FC = () => (
 
 // User Row Skeleton for Admin
 export const UserRowSkeleton: React.FC = () => (
-  <div className="flex items-center gap-4 p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+  <div className="flex items-center gap-4 p-4 bg-white rounded-xl border border-slate-200">
     <Skeleton className="w-10 h-10 rounded-full" />
     <div className="flex-1 space-y-2">
       <Skeleton className="h-4 w-32" />
@@ -105,7 +105,7 @@ export const UserRowSkeleton: React.FC = () => (
 
 // Stats Card Skeleton for Admin
 export const StatsCardSkeleton: React.FC = () => (
-  <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800">
+  <div className="bg-white rounded-2xl p-6 border border-slate-200">
     <div className="flex items-center justify-between mb-4">
       <Skeleton className="w-12 h-12 rounded-xl" />
       <Skeleton className="h-4 w-16" />
@@ -138,7 +138,7 @@ export const LoginFormSkeleton: React.FC = () => (
 export const TableSkeleton: React.FC<{ rows?: number }> = ({ rows = 5 }) => (
   <div className="space-y-3">
     {/* Header */}
-    <div className="flex gap-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-xl">
+    <div className="flex gap-4 p-4 bg-slate-100 rounded-xl">
       <Skeleton className="h-4 w-8" />
       <Skeleton className="h-4 flex-1" />
       <Skeleton className="h-4 w-24" />
@@ -146,7 +146,7 @@ export const TableSkeleton: React.FC<{ rows?: number }> = ({ rows = 5 }) => (
     </div>
     {/* Rows */}
     {Array.from({ length: rows }).map((_, i) => (
-      <div key={i} className="flex gap-4 p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+      <div key={i} className="flex gap-4 p-4 bg-white rounded-xl border border-slate-200">
         <Skeleton className="h-4 w-8" />
         <Skeleton className="h-4 flex-1" />
         <Skeleton className="h-4 w-24" />
@@ -158,9 +158,9 @@ export const TableSkeleton: React.FC<{ rows?: number }> = ({ rows = 5 }) => (
 
 // Full Page Loading Skeleton
 export const PageLoadingSkeleton: React.FC = () => (
-  <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-4 md:p-8">
+  <div className="min-h-screen bg-slate-50 p-4 md:p-8">
     {/* Header */}
-    <div className="flex items-center justify-between mb-8 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+    <div className="flex items-center justify-between mb-8 p-4 bg-white rounded-2xl border border-slate-200">
       <div className="flex items-center gap-3">
         <Skeleton className="w-10 h-10 rounded-xl" />
         <div className="space-y-2">

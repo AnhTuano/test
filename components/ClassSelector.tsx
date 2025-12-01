@@ -129,15 +129,15 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
   if (loadingAll) return <ClassSelectorSkeleton />;
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-[2rem] md:rounded-[2.5rem] shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 p-5 md:p-8 transition-colors">
+    <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-200 p-5 md:p-8 transition-colors">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 md:mb-8">
         <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-3 rounded-2xl text-white shadow-lg shadow-blue-500/20 shrink-0">
           <BookOpen className="w-5 h-5" />
         </div>
         <div>
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">Bộ lọc môn học</h2>
+          <h2 className="text-lg font-bold text-slate-900 leading-tight">Bộ lọc môn học</h2>
           {selectedYear && selectedSemester ? (
-            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium flex items-center gap-2 mt-1">
+            <p className="text-sm text-slate-500 font-medium flex items-center gap-2 mt-1">
               Học kỳ {selectedSemester} <span className="w-1 h-1 rounded-full bg-slate-400"></span> {selectedYear}
             </p>
           ) : (
@@ -150,7 +150,7 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
         
         {/* Year */}
         <div className="relative group">
-          <label className="block text-xs font-extrabold text-slate-500 dark:text-slate-400 mb-2.5 ml-1 uppercase tracking-wider">Năm học</label>
+          <label className="block text-xs font-extrabold text-slate-500 mb-2.5 ml-1 uppercase tracking-wider">Năm học</label>
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors pointer-events-none">
               <Calendar className="w-5 h-5" />
@@ -158,7 +158,7 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
             <select
               value={selectedYear}
               onChange={handleYearChange}
-              className="w-full appearance-none bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-900 dark:text-white font-bold rounded-2xl pl-12 pr-10 py-4 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all cursor-pointer shadow-sm text-sm"
+              className="w-full appearance-none bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-slate-300 text-slate-900 font-bold rounded-2xl pl-12 pr-10 py-4 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all cursor-pointer shadow-sm text-sm"
             >
               <option value="">-- Chọn năm --</option>
               {years.map(y => <option key={y} value={y}>{y}</option>)}
@@ -169,7 +169,7 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
 
         {/* Semester */}
         <div className="relative group">
-          <label className="block text-xs font-extrabold text-slate-500 dark:text-slate-400 mb-2.5 ml-1 uppercase tracking-wider">Học kỳ</label>
+          <label className="block text-xs font-extrabold text-slate-500 mb-2.5 ml-1 uppercase tracking-wider">Học kỳ</label>
           <div className="relative">
              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors pointer-events-none">
               <TrendingUp className="w-5 h-5" />
@@ -178,7 +178,7 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
               value={selectedSemester || ''}
               onChange={handleSemesterChange}
               disabled={!selectedYear}
-              className="w-full appearance-none bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-900 dark:text-white font-bold rounded-2xl pl-12 pr-10 py-4 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-sm text-sm"
+              className="w-full appearance-none bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-slate-300 text-slate-900 font-bold rounded-2xl pl-12 pr-10 py-4 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-sm text-sm"
             >
               <option value="">-- Chọn kỳ --</option>
               {semesters.map(s => <option key={s} value={s}>Học kỳ {s}</option>)}
@@ -189,7 +189,7 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
 
         {/* Class */}
         <div className="relative group">
-          <label className="block text-xs font-extrabold text-slate-500 dark:text-slate-400 mb-2.5 ml-1 uppercase tracking-wider">Môn học</label>
+          <label className="block text-xs font-extrabold text-slate-500 mb-2.5 ml-1 uppercase tracking-wider">Môn học</label>
           <div className="relative">
              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors pointer-events-none">
               <BookOpen className="w-5 h-5" />
@@ -198,7 +198,7 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
               value={selectedClassId || ''}
               onChange={handleClassChange}
               disabled={!selectedSemester}
-              className="w-full appearance-none bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-900 dark:text-white font-bold rounded-2xl pl-12 pr-10 py-4 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-sm truncate text-sm"
+              className="w-full appearance-none bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-slate-300 text-slate-900 font-bold rounded-2xl pl-12 pr-10 py-4 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-sm truncate text-sm"
             >
               <option value="0">-- Chọn môn học --</option>
               {classDetailsList.map(c => (

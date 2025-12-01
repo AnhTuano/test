@@ -76,20 +76,20 @@ const SessionTimeout: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300">
-        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-md w-full p-6 text-center">
-            <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-                <Timer className="w-8 h-8 text-amber-600 dark:text-amber-500" />
+        <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 max-w-md w-full p-6 text-center">
+            <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                <Timer className="w-8 h-8 text-amber-600" />
             </div>
             
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Cảnh báo hết phiên</h3>
-            <p className="text-slate-500 dark:text-slate-400 mb-6">
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Cảnh báo hết phiên</h3>
+            <p className="text-slate-500 mb-6">
                 Để bảo mật, hệ thống sẽ tự động đăng xuất sau <span className="font-bold text-red-500">{timeLeft} giây</span> nữa nếu không có hoạt động.
             </p>
 
             <div className="flex gap-3">
                 <button 
                     onClick={() => logout("Người dùng chủ động đăng xuất")}
-                    className="flex-1 py-3 px-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 py-3 px-4 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition-colors flex items-center justify-center gap-2"
                 >
                     <LogOut className="w-4 h-4" /> Đăng xuất
                 </button>

@@ -26,10 +26,10 @@ const TestResultCard: React.FC<TestResultCardProps> = ({ test, attemptNumber, on
           isPassed ? 'bg-emerald-400/20' : 'bg-red-400/20'
       }`}></div>
 
-      <div className={`h-full bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 p-1 shadow-sm group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2
+      <div className={`h-full bg-white rounded-[2.5rem] border border-slate-100 p-1 shadow-sm group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2
         ${isPassed ? 'group-hover:shadow-emerald-500/10 group-hover:border-emerald-500/20' : 'group-hover:shadow-red-500/10 group-hover:border-red-500/20'}
       `}>
-          <div className="h-full bg-slate-50/50 dark:bg-slate-950/30 rounded-[2.3rem] p-5 md:p-6 flex flex-col items-center relative overflow-hidden">
+          <div className="h-full bg-slate-50/50 rounded-[2.3rem] p-5 md:p-6 flex flex-col items-center relative overflow-hidden">
             
             {/* Top Info */}
             <div className="w-full flex justify-between items-start mb-4 z-10">
@@ -38,8 +38,8 @@ const TestResultCard: React.FC<TestResultCardProps> = ({ test, attemptNumber, on
                 </div>
                 <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${
                     isPassed 
-                    ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800' 
-                    : 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border-red-100 dark:border-red-800'
+                    ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
+                    : 'bg-red-50 text-red-600 border-red-100'
                 }`}>
                     Lần {attemptNumber}
                 </div>
@@ -56,8 +56,8 @@ const TestResultCard: React.FC<TestResultCardProps> = ({ test, attemptNumber, on
             <div className="w-full mt-4 flex items-center justify-center z-10">
                 <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${
                     isPassed 
-                    ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300' 
-                    : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+                    ? 'bg-emerald-100 text-emerald-700' 
+                    : 'bg-red-100 text-red-700'
                 }`}>
                     {isPassed ? <CheckCircle className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
                     {isPassed ? 'ĐẠT' : 'CHƯA ĐẠT'}

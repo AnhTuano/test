@@ -121,14 +121,14 @@ const AuthCallback: React.FC = () => {
   }, [loginWithGoogleToken, loginWithMicrosoftToken, navigate, toast]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 max-w-md w-full mx-4 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100  
+      <div className="bg-white  rounded-2xl shadow-xl p-8 max-w-md w-full mx-4 text-center">
         {status === 'processing' && (
           <>
-            <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-              <Loader2 className="w-8 h-8 text-blue-600 dark:text-blue-400 animate-spin" />
+            <div className="w-16 h-16 mx-auto mb-4 bg-blue-100  rounded-full flex items-center justify-center">
+              <Loader2 className="w-8 h-8 text-blue-600  animate-spin" />
             </div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+            <h2 className="text-xl font-bold text-slate-900  mb-2">
               Đang xử lý
             </h2>
           </>
@@ -136,10 +136,10 @@ const AuthCallback: React.FC = () => {
 
         {status === 'success' && (
           <>
-            <div className="w-16 h-16 mx-auto mb-4 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-              <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-400" />
+            <div className="w-16 h-16 mx-auto mb-4 bg-green-100  rounded-full flex items-center justify-center">
+              <CheckCircle2 className="w-8 h-8 text-green-600  />
             </div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+            <h2 className="text-xl font-bold text-slate-900  mb-2">
               Thành công!
             </h2>
           </>
@@ -147,16 +147,16 @@ const AuthCallback: React.FC = () => {
 
         {status === 'error' && (
           <>
-            <div className="w-16 h-16 mx-auto mb-4 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
-              <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
+            <div className="w-16 h-16 mx-auto mb-4 bg-red-100  rounded-full flex items-center justify-center">
+              <AlertCircle className="w-8 h-8 text-red-600  />
             </div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+            <h2 className="text-xl font-bold text-slate-900  mb-2">
               Có lỗi xảy ra
             </h2>
           </>
         )}
 
-        <p className="text-slate-600 dark:text-slate-400">{message}</p>
+        <p className="text-slate-600 
 
         {status === 'error' && (
           <button

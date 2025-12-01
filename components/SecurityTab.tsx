@@ -155,7 +155,7 @@ const SecurityTab: React.FC = () => {
       {/* Stats Row */}
       {securityStats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex items-center gap-2 mb-2">
               <Shield className={`w-4 h-4 ${
                 securityStats.threatLevel === 'critical' ? 'text-red-500' :
@@ -174,30 +174,30 @@ const SecurityTab: React.FC = () => {
                   securityStats.threatLevel === 'high' ? 'Cao' : 'Nguy hiểm'}
             </div>
           </div>
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex items-center gap-2 mb-2">
               <Lock className="w-4 h-4 text-red-500" />
               <span className="text-[10px] font-bold text-slate-400 uppercase">Tài khoản bị khóa</span>
             </div>
-            <div className="text-xl font-black text-slate-800 dark:text-white">
+            <div className="text-xl font-black text-slate-800">
               {securityStats.blockedIPsCount}
             </div>
           </div>
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex items-center gap-2 mb-2">
               <AlertTriangle className="w-4 h-4 text-amber-500" />
               <span className="text-[10px] font-bold text-slate-400 uppercase">Sự cố (24h)</span>
             </div>
-            <div className="text-xl font-black text-slate-800 dark:text-white">
+            <div className="text-xl font-black text-slate-800">
               {securityStats.totalAttacks24h.toLocaleString()}
             </div>
           </div>
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <div className="flex items-center gap-2 mb-2">
               <Wifi className="w-4 h-4 text-emerald-500" />
               <span className="text-[10px] font-bold text-slate-400 uppercase">Phiên hoạt động</span>
             </div>
-            <div className="text-xl font-black text-slate-800 dark:text-white">
+            <div className="text-xl font-black text-slate-800">
               {securityStats.activeConnections.toLocaleString()}
             </div>
           </div>
@@ -205,9 +205,9 @@ const SecurityTab: React.FC = () => {
       )}
 
       {/* Log Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-        <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
-          <h3 className="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center">
+          <h3 className="font-bold text-slate-800 flex items-center gap-2">
             <Radio className="w-5 h-5 text-red-500 animate-pulse" />
             Tài khoản bị khóa & Mối đe dọa
           </h3>
@@ -217,7 +217,7 @@ const SecurityTab: React.FC = () => {
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-slate-50 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-xs uppercase font-bold">
+            <thead className="bg-slate-50 text-slate-500 text-xs uppercase font-bold">
               <tr>
                 <th className="px-6 py-3">Thời gian</th>
                 <th className="px-6 py-3">Loại</th>
@@ -226,11 +226,11 @@ const SecurityTab: React.FC = () => {
                 <th className="px-6 py-3 text-right">Hành động</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+            <tbody className="divide-y divide-slate-100 text-sm">
               {securityLogs.length > 0 ? (
                 securityLogs.map(log => (
-                  <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
-                    <td className="px-6 py-4 font-mono text-slate-500 dark:text-slate-400 text-xs">
+                  <tr key={log.id} className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-mono text-slate-500 text-xs">
                       {new Date(log.timestamp).toLocaleString('vi-VN', {
                         day: '2-digit',
                         month: '2-digit',
@@ -240,28 +240,28 @@ const SecurityTab: React.FC = () => {
                     </td>
                     <td className="px-6 py-4">
                       <span className={`uppercase font-bold text-xs px-2 py-1 rounded ${
-                        log.type === 'ddos' ? 'text-red-500 bg-red-50 dark:bg-red-900/20' :
-                          log.type === 'sql_injection' ? 'text-purple-500 bg-purple-50 dark:bg-purple-900/20' : 
-                            log.type === 'brute_force' ? 'text-orange-500 bg-orange-50 dark:bg-orange-900/20' : 
-                              'text-amber-500 bg-amber-50 dark:bg-amber-900/20'
+                        log.type === 'ddos' ? 'text-red-500 bg-red-50' :
+                          log.type === 'sql_injection' ? 'text-purple-500 bg-purple-50' : 
+                            log.type === 'brute_force' ? 'text-orange-500 bg-orange-50' : 
+                              'text-amber-500 bg-amber-50'
                         }`}>
                         {log.type === 'ddos' ? 'DDoS' : 
                           log.type === 'brute_force' ? 'Brute Force' :
                             log.type === 'sql_injection' ? 'SQL Injection' : log.type}
                       </span>
                     </td>
-                    <td className="px-6 py-4 font-mono text-slate-800 dark:text-slate-200">
+                    <td className="px-6 py-4 font-mono text-slate-800">
                       {log.ip}
                       <div className="text-[10px] text-slate-400">{log.location}</div>
                     </td>
-                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400 max-w-xs truncate">
+                    <td className="px-6 py-4 text-slate-600 max-w-xs truncate">
                       {log.details}
                     </td>
                     <td className="px-6 py-4 text-right">
                       {log.type === 'brute_force' ? (
                         <button
                           onClick={() => handleUnblock(log)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-bold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 hover:bg-emerald-200 dark:hover:bg-emerald-900/50 transition-colors active:scale-95"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-bold bg-emerald-100 text-emerald-600 hover:bg-emerald-200 transition-colors active:scale-95"
                         >
                           <Unlock className="w-3 h-3" /> Mở khóa
                         </button>

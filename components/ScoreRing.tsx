@@ -63,7 +63,7 @@ const ScoreRing: React.FC<ScoreRingProps> = ({ score, size = 120, strokeWidth = 
         />
       </svg>
       <div className="absolute flex flex-col items-center animate-in fade-in zoom-in duration-700">
-        <span className="text-3xl font-extrabold text-slate-800 dark:text-white transition-colors tracking-tight">{displayScore}</span>
+        <span className="text-3xl font-extrabold text-slate-800 transition-colors tracking-tight">{displayScore}</span>
         <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">/ 10 điểm</span>
       </div>
     </div>

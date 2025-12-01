@@ -140,13 +140,13 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
       
       {/* Floating Filter Bar */}
       <div className="sticky top-20 md:top-24 z-30 mb-6 md:mb-8 flex justify-center pointer-events-none px-4">
-          <div className="pointer-events-auto bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/50 dark:border-slate-700/50 shadow-lg shadow-slate-200/50 dark:shadow-black/50 p-1.5 rounded-full flex items-center gap-1.5 max-w-[95vw] md:max-w-full overflow-hidden animate-in slide-in-from-top-4 duration-500">
+          <div className="pointer-events-auto bg-white/70 backdrop-blur-xl border border-white/50 shadow-lg shadow-slate-200/50 p-1.5 rounded-full flex items-center gap-1.5 max-w-[95vw] md:max-w-full overflow-hidden animate-in slide-in-from-top-4 duration-500">
              
-             <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 shrink-0">
+             <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 shrink-0">
                 <Filter className="w-4 h-4" />
              </div>
              
-             <div className="h-4 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
+             <div className="h-4 w-px bg-slate-200 mx-1"></div>
 
              <div 
                 ref={scrollRef}
@@ -156,8 +156,8 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
                     onClick={() => setSelectedWeek('all')}
                     className={`whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold transition-all duration-300
                     ${selectedWeek === 'all' 
-                        ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md' 
-                        : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                        ? 'bg-slate-900 text-white shadow-md' 
+                        : 'text-slate-500 hover:bg-slate-100'
                     }`}
                 >
                     Tất cả
@@ -168,8 +168,8 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
                         onClick={() => setSelectedWeek(w)}
                         className={`whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold transition-all duration-300
                         ${selectedWeek === w 
-                            ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md' 
-                            : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                            ? 'bg-slate-900 text-white shadow-md' 
+                            : 'text-slate-500 hover:bg-slate-100'
                         }`}
                     >
                         Tuần {w}
@@ -182,8 +182,8 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
       {/* Error Message Toast */}
       {error && (
         <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
-           <div className="bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-300 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3">
-             <div className="bg-red-100 dark:bg-red-800/50 p-1.5 rounded-full">
+           <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3">
+             <div className="bg-red-100 p-1.5 rounded-full">
                <XCircle className="w-5 h-5" />
              </div>
              <p className="font-medium text-sm pr-2">{error}</p>
@@ -216,12 +216,12 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-24 bg-white dark:bg-slate-900 rounded-[2.5rem] border-2 border-dashed border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-500">
-              <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-[2rem] flex items-center justify-center mb-6 shadow-inner rotate-3 hover:rotate-6 transition-transform">
-                <Search className="w-10 h-10 text-slate-300 dark:text-slate-600" />
+            <div className="flex flex-col items-center justify-center py-24 bg-white rounded-[2.5rem] border-2 border-dashed border-slate-200 animate-in zoom-in-95 duration-500">
+              <div className="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center mb-6 shadow-inner rotate-3 hover:rotate-6 transition-transform">
+                <Search className="w-10 h-10 text-slate-300" />
               </div>
-              <h3 className="text-xl font-black text-slate-800 dark:text-white mb-2 tracking-tight">Không tìm thấy dữ liệu</h3>
-              <p className="text-slate-400 dark:text-slate-500 font-medium text-sm text-center max-w-xs leading-relaxed">
+              <h3 className="text-xl font-black text-slate-800 mb-2 tracking-tight">Không tìm thấy dữ liệu</h3>
+              <p className="text-slate-400 font-medium text-sm text-center max-w-xs leading-relaxed">
                  {error === "Không thể tải danh sách kết quả." 
                     ? "Đã xảy ra lỗi kết nối. Vui lòng thử lại sau." 
                     : "Chưa có bài kiểm tra nào phù hợp với bộ lọc hiện tại."}
