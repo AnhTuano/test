@@ -565,6 +565,13 @@ export const api = {
       if (data.data && data.data.length > 0) {
         const profile = data.data[0];
         
+        // Debug: Log all profile fields to find birthday field name
+        console.log('[API] Profile data from ICTU:', JSON.stringify(profile, null, 2));
+        
+        // Try multiple possible field names for birthday
+        const birthday = profile.birthday || profile.ngaysinh || profile.ngay_sinh || 
+                        profile.date_of_birth || profile.dob || profile.birth_date || '';
+        
         const mappedProfile: UserProfile = {
           id: profile.id,
           username: profile.student_code || profile.username,
@@ -575,7 +582,7 @@ export const api = {
           department: profile.category_name || profile.tenkhoa || 'Chưa xác định',
           role: UserRole.USER,
           status: 'active',
-          birthday: profile.birthday,
+          birthday: birthday,
           gender: profile.gender,
           tenlop_quanly: profile.tenlop_quanly,
           tenkhoa: profile.category_name || profile.tenkhoa,
