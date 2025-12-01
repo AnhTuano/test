@@ -13,8 +13,8 @@ import {
   Activity, Award
 } from 'lucide-react';
 
-// Secret admin login key - only admin knows this
-const ADMIN_SECRET_KEY = 'ictu2025admin';
+// Default secret key (fallback if not set in settings)
+const DEFAULT_ADMIN_SECRET_KEY = 'ictu2025admin';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -30,8 +30,9 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
-  // Secret admin access: /login?key=ictu2025admin
-  const isAdminAccess = searchParams.get('key') === ADMIN_SECRET_KEY;
+  // Secret admin access: /login?key=<adminSecretKey>
+  const secretKey = systemSettings?.adminSecretKey || DEFAULT_ADMIN_SECRET_KEY;
+  const isAdminAccess = searchParams.get('key') === secretKey;
 
   useEffect(() => {
     if (isLoggedIn) {

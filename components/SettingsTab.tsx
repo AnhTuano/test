@@ -63,6 +63,14 @@ const SettingsTab: React.FC = () => {
     setSettings(prev => prev ? {...prev, copyrightText: e.target.value} : prev);
   }, []);
 
+  const handleLoginSubtitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSettings(prev => prev ? {...prev, loginSubtitle: e.target.value} : prev);
+  }, []);
+
+  const handleAdminSecretKeyChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSettings(prev => prev ? {...prev, adminSecretKey: e.target.value} : prev);
+  }, []);
+
   const handleSaveSettings = useCallback(async () => {
     if (settings) {
       setSaveStatus('loading');
@@ -87,7 +95,8 @@ const SettingsTab: React.FC = () => {
         portalName: "Student Portal", dashboardTitle: "ICTU Dashboard",
         loginTitle: "Chào mừng trở lại", loginSubtitle: "Cổng thông tin sinh viên ICTU",
         contactEmail: "admin@ictu.edu.vn", contactZalo: "0987654321", appVersion: "v1.0.0", copyrightText: "© 2025 ICTU",
-        aboutTitle: "ICTU Student Portal", aboutDescription: "Hệ thống theo dõi kết quả học tập."
+        aboutTitle: "ICTU Student Portal", aboutDescription: "Hệ thống theo dõi kết quả học tập.",
+        adminSecretKey: "ictu2025admin"
     };
     try {
         await api.adminUpdateSettings(defaultSettings);
@@ -165,6 +174,14 @@ const SettingsTab: React.FC = () => {
                     icon={Type}
                     placeholder="© 2025 ICTU Student Portal"
                 />
+                <SettingInput 
+                    id="loginSubtitle"
+                    label="Mô tả trang Login" 
+                    value={settings.loginSubtitle || ''} 
+                    onChange={handleLoginSubtitleChange}
+                    icon={Type}
+                    placeholder="Cổng thông tin sinh viên ICTU"
+                />
                 
                 <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
                     <div className="flex justify-between items-center group cursor-pointer" onClick={() => setSettings({...settings, maintenanceMode: !settings.maintenanceMode})}>
@@ -176,6 +193,22 @@ const SettingsTab: React.FC = () => {
                             <div className={`w-6 h-6 rounded-full bg-white shadow-md transform transition-transform duration-300 ${settings.maintenanceMode ? 'translate-x-6' : ''}`}></div>
                         </div>
                     </div>
+                    
+                    {/* Admin Secret Key - only show when maintenance mode is ON */}
+                    {settings.maintenanceMode && (
+                      <div className="mt-4 animate-in fade-in slide-in-from-top-2">
+                        <SettingInput 
+                            id="adminSecretKey"
+                            label="🔐 Secret Key (Admin Login)" 
+                            value={settings.adminSecretKey || 'ictu2025admin'} 
+                            onChange={handleAdminSecretKeyChange}
+                            placeholder="Nhập key bí mật"
+                        />
+                        <p className="text-xs text-amber-600 dark:text-amber-400 mt-2 ml-1">
+                          ⚠️ URL đăng nhập: /login?key={settings.adminSecretKey || 'ictu2025admin'}
+                        </p>
+                      </div>
+                    )}
                 </div>
             </div>
         </div>

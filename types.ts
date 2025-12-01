@@ -115,6 +115,7 @@ export interface SystemSettings {
   aboutIntroTitle?: string;
   aboutIntroContent?: string;
   broadcastMessage?: string;
+  adminSecretKey?: string; // Secret key for admin login during maintenance
 }
 
 export interface PopupNotification {
