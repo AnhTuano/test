@@ -565,12 +565,20 @@ export const api = {
       if (data.data && data.data.length > 0) {
         const profile = data.data[0];
         
-        // Debug: Log all profile fields to find birthday field name
-        console.log('[API] Profile data from ICTU:', JSON.stringify(profile, null, 2));
+        // Get birthday from profile or new_personal_info
+        let birthdayRaw = profile.birthday || profile.new_personal_info?.birthday || '';
         
-        // Try multiple possible field names for birthday
-        const birthday = profile.birthday || profile.ngaysinh || profile.ngay_sinh || 
-                        profile.date_of_birth || profile.dob || profile.birth_date || '';
+        // Convert DD/MM/YYYY to ISO format YYYY-MM-DD for proper Date parsing
+        let birthdayISO = '';
+        if (birthdayRaw && typeof birthdayRaw === 'string') {
+          const parts = birthdayRaw.split('/');
+          if (parts.length === 3) {
+            // DD/MM/YYYY -> YYYY-MM-DD
+            birthdayISO = `${parts[2]}-${parts[1]}-${parts[0]}`;
+          } else {
+            birthdayISO = birthdayRaw; // Already in valid format
+          }
+        }
         
         const mappedProfile: UserProfile = {
           id: profile.id,
@@ -582,12 +590,12 @@ export const api = {
           department: profile.category_name || profile.tenkhoa || 'Chưa xác định',
           role: UserRole.USER,
           status: 'active',
-          birthday: birthday,
+          birthday: birthdayISO,
           gender: profile.gender,
           tenlop_quanly: profile.tenlop_quanly,
           tenkhoa: profile.category_name || profile.tenkhoa,
           khoadaotao: profile.khoadaotao,
-          phone: profile.phone || profile.student_code?.toUpperCase(),
+          phone: profile.phone || profile.new_personal_info?.phone || profile.student_code?.toUpperCase(),
           address: profile.address
         };
         
