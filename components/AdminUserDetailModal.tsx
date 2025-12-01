@@ -1,12 +1,9 @@
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { AdminUserDetailedStats, ClassDetails } from '../types';
+import { AdminUserDetailedStats } from '../types';
 import { api } from '../services/api';
-import { useAuth } from './AuthProvider';
-import { X, User, Activity, BookOpen, Clock, Shield, AlertTriangle, Smartphone, LayoutDashboard, GraduationCap } from 'lucide-react';
-import ClassSelector from './ClassSelector';
-import TestResultsDisplay from './TestResultsDisplay';
+import { X, User, Activity, Clock, Shield, AlertTriangle, Smartphone } from 'lucide-react';
 
 interface AdminUserDetailModalProps {
   username: string;
@@ -14,15 +11,9 @@ interface AdminUserDetailModalProps {
 }
 
 const AdminUserDetailModal: React.FC<AdminUserDetailModalProps> = ({ username, onClose }) => {
-  const { token } = useAuth();
   const [data, setData] = useState<AdminUserDetailedStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'academic' | 'activity'>('overview');
-
-  // Grades Page Logic Replication
-  const [selectedClassId, setSelectedClassId] = useState<number | null>(null);
-  const [selectedClassName, setSelectedClassName] = useState<string>("");
-  const [classDetails, setClassDetails] = useState<ClassDetails | null>(null);
+  const [activeTab, setActiveTab] = useState<'overview' | 'activity'>('overview');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,33 +28,6 @@ const AdminUserDetailModal: React.FC<AdminUserDetailModalProps> = ({ username, o
     };
     fetchData();
   }, [username]);
-
-  // Handle Class Selection (Replicated from Grades.tsx)
-  const handleClassSelected = useCallback((classId: number, className: string) => {
-    if (classId === 0) {
-      setSelectedClassId(null);
-      setSelectedClassName("");
-      setClassDetails(null);
-    } else {
-      setSelectedClassId(classId);
-      setSelectedClassName(className);
-    }
-  }, []);
-
-  // Fetch Class Details when selected (Replicated from Grades.tsx)
-  useEffect(() => {
-    const fetchClassData = async () => {
-      if (!selectedClassId || !token) return;
-      try {
-        const details = await api.getClassDetails(token, selectedClassId);
-        setClassDetails(details);
-      } catch (err) {
-        console.error("Error loading class data", err);
-      }
-    };
-    fetchClassData();
-  }, [selectedClassId, token]);
-
 
   const content = (
     <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
@@ -90,7 +54,7 @@ const AdminUserDetailModal: React.FC<AdminUserDetailModalProps> = ({ username, o
 
         {/* Tabs */}
         <div className="flex border-b border-slate-100 dark:border-slate-800 px-6 gap-6 shrink-0 bg-white dark:bg-slate-900 overflow-x-auto no-scrollbar">
-           {['overview', 'academic', 'activity'].map((tab) => (
+           {['overview', 'activity'].map((tab) => (
              <button
                key={tab}
                onClick={() => setActiveTab(tab as any)}
@@ -101,7 +65,6 @@ const AdminUserDetailModal: React.FC<AdminUserDetailModalProps> = ({ username, o
                }`}
              >
                {tab === 'overview' && 'Thông tin chung'}
-               {tab === 'academic' && 'Kết quả học tập'}
                {tab === 'activity' && 'Lịch sử hoạt động'}
              </button>
            ))}
@@ -190,69 +153,6 @@ const AdminUserDetailModal: React.FC<AdminUserDetailModalProps> = ({ username, o
                        </div>
                     </div>
                  </div>
-               )}
-
-               {/* ACADEMIC TAB - FULL REPLICA OF GRADES.TSX */}
-               {activeTab === 'academic' && (
-                  <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
-                     
-                     {/* 1. Class Selector */}
-                     {token && (
-                        <ClassSelector
-                            token={token}
-                            studentId={data.user.id}
-                            initialClassId={null}
-                            onClassSelected={handleClassSelected}
-                        />
-                     )}
-
-                     {/* 2. Class Info Card */}
-                     {selectedClassId && classDetails && (
-                        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-700 dark:to-indigo-800 rounded-[2rem] shadow-lg text-white p-6 md:p-8 relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <div className="relative z-10">
-                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                    <div>
-                                        <span className="bg-white/20 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 inline-block">
-                                            {classDetails.kyhieu}
-                                        </span>
-                                        <h2 className="text-2xl md:text-3xl font-bold mb-2">{classDetails.name}</h2>
-                                        <p className="text-blue-100 flex items-center gap-2">
-                                            <LayoutDashboard className="w-4 h-4" />
-                                            {classDetails.sotinchi} Tín chỉ
-                                        </p>
-                                    </div>
-                                    <div className="text-right">
-                                         <div className="text-blue-200 text-sm mb-1">Giảng viên</div>
-                                         {classDetails.managers.map(m => (
-                                             <div key={m.username} className="font-semibold text-lg">{m.display_name}</div>
-                                         ))}
-                                    </div>
-                                </div>
-                            </div>
-                            {/* Decoration */}
-                            <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-                        </div>
-                     )}
-
-                     {/* 3. Results Display */}
-                     {selectedClassId && token ? (
-                         <div className="bg-slate-100 dark:bg-slate-900/50 p-4 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
-                            <TestResultsDisplay 
-                                token={token}
-                                classId={selectedClassId}
-                                className={selectedClassName}
-                            />
-                         </div>
-                     ) : (
-                         <div className="flex flex-col items-center justify-center py-20 text-center opacity-50 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 border-dashed">
-                             <BookOpen className="w-24 h-24 text-slate-300 dark:text-slate-600 mb-4" />
-                             <h3 className="text-xl font-bold text-slate-400 dark:text-slate-500">Chưa chọn môn học</h3>
-                             <p className="text-slate-400 dark:text-slate-500 max-w-sm mt-2">
-                                Vui lòng chọn năm học, học kỳ và môn học để xem chi tiết điểm số của sinh viên này.
-                             </p>
-                         </div>
-                     )}
-                  </div>
                )}
 
                {/* ACTIVITY TAB */}
