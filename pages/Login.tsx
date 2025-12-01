@@ -8,7 +8,7 @@ import { initiateGoogleLogin, isGoogleAuthConfigured } from '../services/googleA
 import { initiateMicrosoftLogin, isMicrosoftAuthConfigured } from '../services/microsoftAuth';
 import { sanitizeUsername, hasSqlInjection, hasXssPattern } from '../utils/sanitize';
 import { 
-  Loader2, AlertCircle, Shield, GraduationCap, Lock, KeyRound, Ban, 
+  Loader2, AlertCircle, Shield, Lock, Ban, 
   Mail, User, Eye, EyeOff, ArrowRight,
   Activity, Award
 } from 'lucide-react';
@@ -134,43 +134,43 @@ const Login: React.FC = () => {
   // Wait for settings to load before showing the form
   if (!settingsLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white 
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex w-full bg-white  transition-colors duration-300 overflow-hidden">
+    <div className="min-h-screen flex w-full bg-white transition-colors duration-300 overflow-hidden">
       
       {/* LEFT SIDE: Premium Branding & Visuals (60% width on LG) */}
-      <div className="hidden lg:flex lg:w-[60%] relative bg-slate-100  items-center justify-center p-16 overflow-hidden">
+      <div className="hidden lg:flex lg:w-[60%] relative bg-slate-100 items-center justify-center p-16 overflow-hidden">
           
           {/* Animated Mesh Gradient Background - Optimized */}
-          <div className="absolute inset-0 bg-slate-50  overflow-hidden">
-             <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-400  rounded-full mix-blend-multiply filter blur-[128px] opacity-30  animate-blob will-change-transform"></div>
-             <div className="absolute top-0 -right-4 w-96 h-96 bg-blue-400  rounded-full mix-blend-multiply filter blur-[128px] opacity-30  animate-blob animation-delay-2000 will-change-transform"></div>
-             <div className="absolute -bottom-32 left-20 w-96 h-96 bg-indigo-400  rounded-full mix-blend-multiply filter blur-[128px] opacity-30  animate-blob animation-delay-4000 will-change-transform"></div>
-             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10  brightness-100 contrast-150"></div>
+          <div className="absolute inset-0 bg-slate-50 overflow-hidden">
+             <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-blob will-change-transform"></div>
+             <div className="absolute top-0 -right-4 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-blob animation-delay-2000 will-change-transform"></div>
+             <div className="absolute -bottom-32 left-20 w-96 h-96 bg-indigo-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-blob animation-delay-4000 will-change-transform"></div>
+             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 brightness-100 contrast-150"></div>
           </div>
 
           <div className="relative z-10 w-full max-w-2xl flex flex-col items-center text-center">
              
              <div className="relative w-full h-[400px] mb-12 animate-float perspective-1000">
                  
-                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[320px] bg-white/80  backdrop-blur-xl border border-slate-200  rounded-3xl shadow-2xl p-6 flex flex-col gap-4 transform rotate-y-6 rotate-x-6 hover:rotate-0 transition-all duration-700">
-                     <div className="flex items-center justify-between border-b border-slate-100  pb-4">
+                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[320px] bg-white/80 backdrop-blur-xl border border-slate-200 rounded-3xl shadow-2xl p-6 flex flex-col gap-4 transform rotate-y-6 rotate-x-6 hover:rotate-0 transition-all duration-700">
+                     <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                         <div className="flex gap-2">
                            <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
                            <div className="w-3 h-3 rounded-full bg-amber-500/80"></div>
                            <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                         </div>
-                        <div className="h-2 w-20 bg-slate-200  rounded-full"></div>
+                        <div className="h-2 w-20 bg-slate-200 rounded-full"></div>
                      </div>
                      <div className="flex-1 flex items-end gap-2 px-2 pb-2">
                         {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
-                           <div key={i} className="flex-1 bg-gradient-to-t from-blue-400/40  to-blue-500/80  rounded-t-lg relative group" style={{ height: `${h}%` }}>
-                              <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800  text-white  text-[10px] font-bold px-2 py-1 rounded">
+                           <div key={i} className="flex-1 bg-gradient-to-t from-blue-400/40 to-blue-500/80 rounded-t-lg relative group" style={{ height: `${h}%` }}>
+                              <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded">
                                  {h}%
                               </div>
                            </div>
@@ -178,37 +178,37 @@ const Login: React.FC = () => {
                      </div>
                  </div>
 
-                 <div className="absolute top-0 right-10 w-48 bg-white/90  backdrop-blur-2xl border border-slate-200  rounded-2xl p-4 shadow-xl animate-float animation-delay-2000">
+                 <div className="absolute top-0 right-10 w-48 bg-white/90 backdrop-blur-2xl border border-slate-200 rounded-2xl p-4 shadow-xl animate-float animation-delay-2000">
                     <div className="flex items-center gap-3 mb-2">
-                       <div className="p-2 bg-emerald-100  rounded-lg">
-                          <Award className="w-5 h-5 text-emerald-600  />
+                       <div className="p-2 bg-emerald-100 rounded-lg">
+                          <Award className="w-5 h-5 text-emerald-600" />
                        </div>
-                       <div className="text-xs text-emerald-700  font-medium">GPA Cao nhất</div>
+                       <div className="text-xs text-emerald-700 font-medium">GPA Cao nhất</div>
                     </div>
-                    <div className="text-3xl font-bold text-slate-800  tracking-tight">3.92</div>
-                    <div className="w-full h-1.5 bg-slate-200  rounded-full mt-3 overflow-hidden">
-                       <div className="w-[92%] h-full bg-emerald-500  rounded-full"></div>
+                    <div className="text-3xl font-bold text-slate-800 tracking-tight">3.92</div>
+                    <div className="w-full h-1.5 bg-slate-200 rounded-full mt-3 overflow-hidden">
+                       <div className="w-[92%] h-full bg-emerald-500 rounded-full"></div>
                     </div>
                  </div>
 
-                 <div className="absolute bottom-0 left-10 w-56 bg-white/90  backdrop-blur-2xl border border-slate-200  rounded-2xl p-4 shadow-xl animate-float animation-delay-4000">
+                 <div className="absolute bottom-0 left-10 w-56 bg-white/90 backdrop-blur-2xl border border-slate-200 rounded-2xl p-4 shadow-xl animate-float animation-delay-4000">
                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs text-blue-700  font-bold uppercase">Hoạt động</span>
-                        <Activity className="w-4 h-4 text-blue-600  />
+                        <span className="text-xs text-blue-700 font-bold uppercase">Hoạt động</span>
+                        <Activity className="w-4 h-4 text-blue-600" />
                      </div>
                      <div className="space-y-3">
                         <div className="flex items-center gap-3">
-                           <div className="w-8 h-8 rounded-full bg-blue-100  flex items-center justify-center text-[10px] text-blue-700  font-bold">W1</div>
+                           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-[10px] text-blue-700 font-bold">W1</div>
                            <div className="flex-1">
-                              <div className="h-1.5 w-16 bg-slate-300  rounded-full mb-1"></div>
-                              <div className="h-1.5 w-8 bg-slate-200  rounded-full"></div>
+                              <div className="h-1.5 w-16 bg-slate-300 rounded-full mb-1"></div>
+                              <div className="h-1.5 w-8 bg-slate-200 rounded-full"></div>
                            </div>
                         </div>
                         <div className="flex items-center gap-3">
-                           <div className="w-8 h-8 rounded-full bg-purple-100  flex items-center justify-center text-[10px] text-purple-700  font-bold">W2</div>
+                           <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-[10px] text-purple-700 font-bold">W2</div>
                            <div className="flex-1">
-                              <div className="h-1.5 w-20 bg-slate-300  rounded-full mb-1"></div>
-                              <div className="h-1.5 w-12 bg-slate-200  rounded-full"></div>
+                              <div className="h-1.5 w-20 bg-slate-300 rounded-full mb-1"></div>
+                              <div className="h-1.5 w-12 bg-slate-200 rounded-full"></div>
                            </div>
                         </div>
                      </div>
@@ -219,35 +219,35 @@ const Login: React.FC = () => {
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="w-full lg:w-[40%] flex flex-col justify-center px-6 sm:px-12 md:px-20 bg-white  relative overflow-y-auto">
+      <div className="w-full lg:w-[40%] flex flex-col justify-center px-6 sm:px-12 md:px-20 bg-white relative overflow-y-auto">
 
           <div className="w-full max-w-md mx-auto space-y-8 animate-in slide-in-from-right-8 duration-700 fade-in py-10 lg:py-0">
               
               <div className="space-y-2">
-                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900  tracking-tight break-words">
+                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight break-words">
                     {isBlockedState ? "Tài khoản bị hạn chế" : isConcurrentState ? "Phiên đăng nhập hết hạn" : (systemSettings?.loginTitle || "Chào mừng trở lại")}
                  </h2>
-                 <p className="text-sm sm:text-base text-slate-500  font-medium break-words">
+                 <p className="text-sm sm:text-base text-slate-500 font-medium break-words">
                     {isConcurrentState ? "Tài khoản đang được sử dụng ở nơi khác" : (systemSettings?.loginSubtitle || "Nhập thông tin xác thực để truy cập.")}
                  </p>
               </div>
 
               {isBlockedState && currentMessage ? (
-                  <div className="bg-red-50  border border-red-100  p-6 rounded-2xl space-y-4">
+                  <div className="bg-red-50 border border-red-100 p-6 rounded-2xl space-y-4">
                       <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-red-100  rounded-xl flex items-center justify-center text-red-600 shrink-0">
+                          <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600 shrink-0">
                               <Ban className="w-6 h-6" />
                           </div>
                           <div>
-                             <p className="text-xs font-bold text-red-600  uppercase tracking-wider">Trạng thái khóa</p>
-                             <p className="font-bold text-slate-900 
+                             <p className="text-xs font-bold text-red-600 uppercase tracking-wider">Trạng thái khóa</p>
+                             <p className="font-bold text-slate-900">{getBlockReason(currentMessage)}</p>
                           </div>
                       </div>
                       <div className="flex gap-3 pt-2">
-                          <a href={`mailto:${systemSettings?.contactEmail}`} className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white  border border-slate-200  text-sm font-bold hover:bg-slate-50  transition-colors">
+                          <a href={`mailto:${systemSettings?.contactEmail}`} className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold hover:bg-slate-50 transition-colors">
                               <Mail className="w-4 h-4" /> Gửi hỗ trợ
                           </a>
-                          <button onClick={() => { setError(null); clearLogoutMessage(); }} className="px-4 text-sm font-bold text-slate-500 hover:text-slate-800  transition-colors">
+                          <button onClick={() => { setError(null); clearLogoutMessage(); }} className="px-4 text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">
                              Quay lại
                           </button>
                       </div>
@@ -255,21 +255,21 @@ const Login: React.FC = () => {
               ) : (
                  <>
                     {logoutMessage && (
-                        <div className="p-4 bg-amber-50  border border-amber-100  rounded-xl flex items-start gap-3">
+                        <div className="p-4 bg-amber-50 border border-amber-100 rounded-xl flex items-start gap-3">
                             <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-                            <p className="text-sm font-medium text-amber-900 
+                            <p className="text-sm font-medium text-amber-900">{logoutMessage}</p>
                         </div>
                     )}
                     {error && (
-                        <div className="p-4 bg-red-50  border border-red-100  rounded-xl flex items-start gap-3 animate-in shake">
+                        <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3 animate-in shake">
                             <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-                            <p className="text-sm font-medium text-red-900 
+                            <p className="text-sm font-medium text-red-900">{error}</p>
                         </div>
                     )}
                     {systemSettings?.maintenanceMode && (
-                        <div className="p-4 bg-blue-50  border border-blue-100  rounded-xl flex items-start gap-3">
+                        <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-3">
                             <Shield className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                            <p className="text-sm font-medium text-blue-900 
+                            <p className="text-sm font-medium text-blue-900">
                               {isAdminAccess 
                                 ? "Chế độ bảo trì - Đăng nhập Admin" 
                                 : "Hệ thống đang bảo trì kỹ thuật. Vui lòng quay lại sau."}
@@ -283,7 +283,7 @@ const Login: React.FC = () => {
                             
                             <div className="space-y-4">
                                 <div className="space-y-1.5">
-                                    <label className="text-sm font-bold text-slate-700  ml-1">Tài khoản</label>
+                                    <label className="text-sm font-bold text-slate-700 ml-1">Tài khoản</label>
                                     <div className="relative group">
                                         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">
                                             <User className="w-5 h-5" />
@@ -292,7 +292,7 @@ const Login: React.FC = () => {
                                             type="text" 
                                             value={username}
                                             onChange={(e) => setUsername(e.target.value)}
-                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50  border border-slate-200  rounded-2xl outline-none focus:bg-white  focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-semibold text-slate-900  placeholder:text-slate-400 appearance-none"
+                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-semibold text-slate-900 placeholder:text-slate-400 appearance-none"
                                             placeholder="Mã sinh viên / Username"
                                         />
                                     </div>
@@ -300,7 +300,7 @@ const Login: React.FC = () => {
 
                                 <div className="space-y-1.5">
                                     <div className="flex justify-between items-center ml-1">
-                                       <label className="text-sm font-bold text-slate-700  khẩu</label>
+                                       <label className="text-sm font-bold text-slate-700">Mật khẩu</label>
                                     </div>
                                     <div className="relative group">
                                         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">
@@ -310,13 +310,13 @@ const Login: React.FC = () => {
                                             type={showPassword ? "text" : "password"} 
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            className="w-full appearance-none pl-12 pr-12 py-3.5 bg-slate-50  border border-slate-200  rounded-2xl outline-none focus:bg-white  focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-semibold text-slate-900  placeholder:text-slate-400"
+                                            className="w-full appearance-none pl-12 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-semibold text-slate-900 placeholder:text-slate-400"
                                             placeholder="••••••••"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600  focus:outline-none p-1 rounded-md hover:bg-slate-100  transition-colors"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none p-1 rounded-md hover:bg-slate-100 transition-colors"
                                         >
                                             {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                         </button>
@@ -337,12 +337,12 @@ const Login: React.FC = () => {
                             </button>
                         </form>
                     ) : (
-                        <div className="text-center py-10 px-6 bg-slate-50  rounded-3xl border border-slate-200  border-dashed">
-                            <div className="w-16 h-16 bg-white  rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-400 shadow-sm border border-slate-100 
+                        <div className="text-center py-10 px-6 bg-slate-50 rounded-3xl border border-slate-200 border-dashed">
+                            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-400 shadow-sm border border-slate-100">
                                 <Lock className="w-8 h-8" />
                             </div>
-                            <h3 className="text-lg font-bold text-slate-800  mb-2">Đăng nhập tạm khóa</h3>
-                            <div className="text-slate-500  text-sm leading-relaxed max-w-xs mx-auto"
+                            <h3 className="text-lg font-bold text-slate-800 mb-2">Đăng nhập tạm khóa</h3>
+                            <div className="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto"
                                 dangerouslySetInnerHTML={{ __html: systemSettings?.disableLoginMessage || "Vui lòng sử dụng SSO." }}
                             />
                         </div>
@@ -352,15 +352,15 @@ const Login: React.FC = () => {
                     {!systemSettings?.maintenanceMode && (
                       <>
                         <div className="relative py-2">
-                            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-100 
-                            <div className="relative flex justify-center"><span className="bg-white  px-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Hoặc đăng nhập với</span></div>
+                            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-100"></div></div>
+                            <div className="relative flex justify-center"><span className="bg-white px-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Hoặc đăng nhập với</span></div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <button 
                                 type="button" 
                                 onClick={handleGoogleLogin}
-                                className="flex items-center justify-center gap-3 h-12 border border-slate-200  rounded-2xl hover:bg-slate-50  transition-all font-bold text-sm text-slate-700  hover:border-slate-300  group active:scale-95"
+                                className="flex items-center justify-center gap-3 h-12 border border-slate-200 rounded-2xl hover:bg-slate-50 transition-all font-bold text-sm text-slate-700 hover:border-slate-300 group active:scale-95"
                             >
                                 <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
                                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -373,7 +373,7 @@ const Login: React.FC = () => {
                             <button 
                                 type="button" 
                                 onClick={handleMicrosoftLogin}
-                                className="flex items-center justify-center gap-3 h-12 border border-slate-200  rounded-2xl hover:bg-slate-50  transition-all font-bold text-sm text-slate-700  hover:border-slate-300  group active:scale-95"
+                                className="flex items-center justify-center gap-3 h-12 border border-slate-200 rounded-2xl hover:bg-slate-50 transition-all font-bold text-sm text-slate-700 hover:border-slate-300 group active:scale-95"
                             >
                                 <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 21 21">
                                     <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
@@ -390,7 +390,7 @@ const Login: React.FC = () => {
               )}
               
               <div className="pt-6 text-center">
-                  <p className="text-xs font-semibold text-slate-400 
+                  <p className="text-xs font-semibold text-slate-400">
                     {systemSettings?.copyrightText || "© 2025 ICTU Student Portal. Powered by React."}
                   </p>
               </div>
