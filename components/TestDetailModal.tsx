@@ -395,19 +395,19 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
                                             key={opt.id} 
                                             className={`relative group p-4 rounded-xl text-sm border transition-all duration-200 flex items-center justify-between
                                             ${isCorrect 
-                                                ? 'bg-emerald-50/60 dark:bg-emerald-900/30 border-emerald-500/30 text-emerald-900 dark:text-emerald-300 font-medium ring-1 ring-emerald-500/20' 
-                                                : 'bg-white dark:bg-slate-700/50 border-slate-100 dark:border-slate-600 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700'
+                                                ? 'bg-emerald-50/60 dark:bg-emerald-900/30 border-emerald-500/30 text-emerald-900 dark:text-emerald-200 font-medium ring-1 ring-emerald-500/20' 
+                                                : 'bg-white dark:bg-slate-700/50 border-slate-100 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700'
                                             }`}
                                         >
                                             <div className="flex items-center gap-4">
                                                 <div className={`w-7 h-7 rounded-full flex items-center justify-center border text-xs font-bold transition-colors flex-shrink-0
-                                                    ${isCorrect ? 'bg-emerald-500 border-emerald-500 text-white' : 'bg-slate-50 dark:bg-slate-600 border-slate-200 dark:border-slate-500 text-slate-400 dark:text-slate-300 group-hover:border-slate-300'}
+                                                    ${isCorrect ? 'bg-emerald-500 border-emerald-500 text-white' : 'bg-slate-50 dark:bg-slate-600 border-slate-200 dark:border-slate-500 text-slate-500 dark:text-slate-200 group-hover:border-slate-300'}
                                                 `}>
                                                     {optionLetter}
                                                 </div>
                                                 {/* Render answer HTML content */}
                                                 <div 
-                                                    className="leading-snug prose prose-sm dark:prose-invert max-w-none prose-p:my-0 prose-img:max-w-[200px] prose-img:h-auto prose-img:my-1"
+                                                    className="leading-snug prose prose-sm dark:prose-invert max-w-none prose-p:my-0 prose-img:max-w-[200px] prose-img:h-auto prose-img:my-1 text-slate-700 dark:text-slate-200"
                                                     dangerouslySetInnerHTML={{ __html: processHtmlContent(opt.value) }}
                                                 />
                                             </div>
