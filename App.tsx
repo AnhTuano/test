@@ -1,5 +1,5 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './components/AuthProvider';
 import { ThemeProvider } from './components/ThemeProvider';
 import { ToastProvider } from './components/ToastProvider';
@@ -49,7 +49,7 @@ const App: React.FC = () => {
             {/* Security Session Monitor */}
             <SessionTimeout />
             
-            <HashRouter>
+            <BrowserRouter>
               <Suspense fallback={<PageLoadingSkeleton />}>
                 <Routes>
                   <Route path="/login" element={<Login />} />
@@ -67,7 +67,7 @@ const App: React.FC = () => {
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
-            </HashRouter>
+            </BrowserRouter>
           </AuthProvider>
         </ToastProvider>
       </ThemeProvider>
