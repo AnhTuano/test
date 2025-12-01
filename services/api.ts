@@ -6,7 +6,21 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 // API Configuration
 // In production, use Edge Function proxy to handle CORS/Origin issues with ICTU API
 const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-const BASE_URL = isLocalhost ? '/ionline/api' : '/api/ictu';
+
+// Helper to build API URL
+const buildApiUrl = (path: string, params?: URLSearchParams): string => {
+  if (isLocalhost) {
+    // Local dev uses Vite proxy directly
+    const queryString = params ? `?${params.toString()}` : '';
+    return `/ionline/api${path}${queryString}`;
+  } else {
+    // Production uses Edge Function with path as query param
+    const searchParams = params || new URLSearchParams();
+    searchParams.set('path', path);
+    return `/api/ictu?${searchParams.toString()}`;
+  }
+};
+
 const API_TIMEOUT = 15000; // 15 seconds
 
 // --- Rate Limiter State ---
@@ -158,7 +172,7 @@ export const api = {
       
       
       
-      const response = await fetchWithTimeout(`${BASE_URL}/login`, {
+      const response = await fetchWithTimeout(buildApiUrl('/login'), {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(body)
@@ -291,7 +305,7 @@ export const api = {
       
       
       
-      const response = await fetchWithTimeout(`${BASE_URL}/login-google`, {
+      const response = await fetchWithTimeout(buildApiUrl('/login-google'), {
         method: 'POST',
         headers,
         body: JSON.stringify(body),
@@ -407,7 +421,7 @@ export const api = {
       
       
       
-      const response = await fetchWithTimeout(`${BASE_URL}/login-microsoft`, {
+      const response = await fetchWithTimeout(buildApiUrl('/login-microsoft'), {
         method: 'POST',
         headers,
         body: JSON.stringify(body),
@@ -531,7 +545,7 @@ export const api = {
     checkRateLimit();
     
     try {
-      const response = await fetchWithTimeout(`${BASE_URL}/user-profile/`, { 
+      const response = await fetchWithTimeout(buildApiUrl('/user-profile/'), { 
         headers: getDefaultHeaders(token) 
       });
       const data = await handleResponse<any>(response, 'getProfile');
@@ -606,7 +620,7 @@ export const api = {
         'condition[0][compare]': '='
       });
       
-      const response = await fetchWithTimeout(`${BASE_URL}/class-students/?${params.toString()}`, { 
+      const response = await fetchWithTimeout(buildApiUrl('/class-students/', params), { 
         headers: getDefaultHeaders(token) 
       });
       
@@ -627,7 +641,7 @@ export const api = {
         'with': 'managers'
       });
       
-      const response = await fetchWithTimeout(`${BASE_URL}/class/${classId}?${params.toString()}`, { 
+      const response = await fetchWithTimeout(buildApiUrl(`/class/${classId}`, params), { 
         headers: getDefaultHeaders(token) 
       });
       
@@ -667,7 +681,7 @@ export const api = {
         'condition[0][compare]': '='
       });
       
-      const response = await fetchWithTimeout(`${BASE_URL}/class-plans/?${params.toString()}`, { 
+      const response = await fetchWithTimeout(buildApiUrl('/class-plans/', params), { 
         headers: getDefaultHeaders(token) 
       });
       
@@ -701,7 +715,7 @@ export const api = {
       
       
       
-      const response = await fetchWithTimeout(`${BASE_URL}/class-plan-activity-student-tests/?${params.toString()}`, { 
+      const response = await fetchWithTimeout(buildApiUrl('/class-plan-activity-student-tests/', params), { 
         headers: getDefaultHeaders(token) 
       });
       
@@ -754,7 +768,7 @@ export const api = {
       
       
       
-      const response = await fetchWithTimeout(`${BASE_URL}/class-plan-activity-student-tests/?${params.toString()}`, { 
+      const response = await fetchWithTimeout(buildApiUrl('/class-plan-activity-student-tests/', params), { 
         headers: getDefaultHeaders(token) 
       });
       

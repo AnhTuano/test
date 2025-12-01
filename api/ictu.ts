@@ -21,9 +21,14 @@ export default async function handler(request: Request) {
   const url = new URL(request.url);
   
   // Get the actual API path from the URL
-  // /api/ictu/login -> /ionline/api/login
-  const apiPath = url.pathname.replace('/api/ictu', '/ionline/api');
-  const targetUrl = `${ICTU_BASE_URL}${apiPath}${url.search}`;
+  // /api/ictu?path=/login -> /ionline/api/login
+  const path = url.searchParams.get('path') || '';
+  
+  // Build target URL - remove 'path' param and keep others
+  const targetParams = new URLSearchParams(url.searchParams);
+  targetParams.delete('path');
+  const queryString = targetParams.toString();
+  const targetUrl = `${ICTU_BASE_URL}/ionline/api${path}${queryString ? '?' + queryString : ''}`;
 
   // Build headers with ICTU origin
   const headers = new Headers();
