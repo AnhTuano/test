@@ -4,7 +4,9 @@ import { getRequestSignature, APP_ID } from '../utils/requestSignature';
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // API Configuration
-const BASE_URL = '/ionline/api'; // Proxy path
+// In production, use Edge Function proxy to handle CORS/Origin issues with ICTU API
+const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+const BASE_URL = isLocalhost ? '/ionline/api' : '/api/ictu';
 const API_TIMEOUT = 15000; // 15 seconds
 
 // --- Rate Limiter State ---
