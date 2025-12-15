@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 import { TestResultData } from '../types';
 import { api } from '../services/api';
+import { useTestResults } from '../hooks/useApi';
 import { useAuth } from './AuthProvider';
 import TestResultCard from './TestResultCard';
 import { WeekCardSkeleton, TestResultSkeleton } from './Skeleton';
@@ -22,10 +23,10 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
   const [results, setResults] = useState<TestResultData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Filter State
   const [selectedWeek, setSelectedWeek] = useState<number | 'all'>('all');
-  
+
   // Modal State
   const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [detailedTest, setDetailedTest] = useState<TestResultData | null>(null);
@@ -43,7 +44,7 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
         const data = await api.getAllTestResultsForClass(token, classId);
         setResults(data);
       } catch (err) {
-        
+
         setError("Không thể tải danh sách kết quả.");
       } finally {
         setLoading(false);
@@ -60,21 +61,21 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
       if (!byWeek[r.week]) byWeek[r.week] = [];
       byWeek[r.week].push(r);
     });
-    
+
     // Flatten with attempt info
     const processed: (TestResultData & { attempt: number })[] = [];
     Object.keys(byWeek).forEach(w => {
       const weekNum = Number(w);
       // Sort by submit date ascending to determine attempt number
-      const weekResults = byWeek[weekNum].sort((a, b) => 
+      const weekResults = byWeek[weekNum].sort((a, b) =>
         new Date(a.submit_at).getTime() - new Date(b.submit_at).getTime()
       );
-      
+
       weekResults.forEach((r, idx) => {
         processed.push({ ...r, attempt: idx + 1 });
       });
     });
-    
+
     return processed;
   }, [results]);
 
@@ -104,7 +105,7 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
     if (error && error !== "Không thể tải danh sách kết quả.") {
       setError(null);
     }
-    
+
     // Tìm test từ danh sách đã có để mở modal ngay lập tức
     const basicTest = processedResults.find(r => r.id === testId);
     if (basicTest) {
@@ -112,17 +113,17 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
       setDetailedTest(basicTest);
       setSelectedTestId(testId);
     }
-    
+
     // Sau đó load thêm chi tiết câu hỏi ở background
     setIsLoadingDetails(true);
     try {
       const detail = await api.getTestDetails(token, testId);
       setDetailedTest(detail);
     } catch (err: any) {
-      
+
       // Nếu không load được chi tiết, vẫn giữ modal mở với dữ liệu cơ bản
       // Chỉ hiển thị lỗi nhẹ, không đóng modal
-      
+
     } finally {
       setIsLoadingDetails(false);
     }
@@ -137,67 +138,66 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
 
   return (
     <div className="relative min-h-[500px]">
-      
-      {/* Floating Filter Bar */}
-      <div className="sticky top-20 md:top-24 z-30 mb-6 md:mb-8 flex justify-center pointer-events-none px-4">
-          <div className="pointer-events-auto bg-white/70 backdrop-blur-xl border border-white/50 shadow-lg shadow-slate-200/50 p-1.5 rounded-full flex items-center gap-1.5 max-w-[95vw] md:max-w-full overflow-hidden animate-in slide-in-from-top-4 duration-500">
-             
-             <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 shrink-0">
-                <Filter className="w-4 h-4" />
-             </div>
-             
-             <div className="h-4 w-px bg-slate-200 mx-1"></div>
 
-             <div 
-                ref={scrollRef}
-                className="flex items-center gap-1 overflow-x-auto no-scrollbar max-w-full px-1"
-             >
-                <button
-                    onClick={() => setSelectedWeek('all')}
-                    className={`whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold transition-all duration-300
-                    ${selectedWeek === 'all' 
-                        ? 'bg-slate-900 text-white shadow-md' 
-                        : 'text-slate-500 hover:bg-slate-100'
-                    }`}
-                >
-                    Tất cả
-                </button>
-                {weeks.map(w => (
-                    <button
-                        key={w}
-                        onClick={() => setSelectedWeek(w)}
-                        className={`whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold transition-all duration-300
-                        ${selectedWeek === w 
-                            ? 'bg-slate-900 text-white shadow-md' 
-                            : 'text-slate-500 hover:bg-slate-100'
-                        }`}
-                    >
-                        Tuần {w}
-                    </button>
-                ))}
-             </div>
+      {/* Improved Filter Bar - More Compact */}
+      <div className="mb-8 flex justify-center">
+        <div className="inline-flex items-center gap-2 bg-white border border-slate-200 shadow-lg rounded-2xl p-2">
+          {/* Filter Icon */}
+          <div className="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 shrink-0">
+            <Filter className="w-4 h-4" />
           </div>
+
+          {/* Divider */}
+          <div className="h-6 w-px bg-slate-200"></div>
+
+          {/* Filter Buttons */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar max-w-[calc(100vw-200px)] px-1">
+            <button
+              onClick={() => setSelectedWeek('all')}
+              className={`whitespace-nowrap px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200
+                     ${selectedWeek === 'all'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
+                  : 'text-slate-600 hover:bg-slate-50'
+                }`}
+            >
+              Tất cả
+            </button>
+            {weeks.map(w => (
+              <button
+                key={w}
+                onClick={() => setSelectedWeek(w)}
+                className={`whitespace-nowrap px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200
+                         ${selectedWeek === w
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
+                    : 'text-slate-600 hover:bg-slate-50'
+                  }`}
+              >
+                Tuần {w}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Error Message Toast */}
       {error && (
         <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
-           <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3">
-             <div className="bg-red-100 p-1.5 rounded-full">
-               <XCircle className="w-5 h-5" />
-             </div>
-             <p className="font-medium text-sm pr-2">{error}</p>
-             <button onClick={() => setError(null)} className="ml-auto text-red-400 hover:text-red-600">
-               <span className="sr-only">Close</span>
-               <XCircle className="w-4 h-4" />
-             </button>
-           </div>
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3">
+            <div className="bg-red-100 p-1.5 rounded-full">
+              <XCircle className="w-5 h-5" />
+            </div>
+            <p className="font-medium text-sm pr-2">{error}</p>
+            <button onClick={() => setError(null)} className="ml-auto text-red-400 hover:text-red-600">
+              <span className="sr-only">Close</span>
+              <XCircle className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
 
       {/* Content Area */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
           {Array.from({ length: 8 }).map((_, i) => (
             <TestResultSkeleton key={i} />
           ))}
@@ -205,26 +205,26 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
       ) : (
         <>
           {displayResults.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 md:gap-6 animate-in fade-in duration-500">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 animate-in fade-in duration-500">
               {displayResults.map(test => (
-                <TestResultCard 
-                  key={test.id} 
-                  test={test} 
+                <TestResultCard
+                  key={test.id}
+                  test={test}
                   attemptNumber={test.attempt}
-                  onClick={() => handleViewDetails(test.id)} 
+                  onClick={() => handleViewDetails(test.id)}
                 />
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-24 bg-white rounded-[2.5rem] border-2 border-dashed border-slate-200 animate-in zoom-in-95 duration-500">
-              <div className="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center mb-6 shadow-inner rotate-3 hover:rotate-6 transition-transform">
-                <Search className="w-10 h-10 text-slate-300" />
+            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border-2 border-dashed border-slate-200 animate-in zoom-in-95 duration-500">
+              <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-5 shadow-inner">
+                <Search className="w-8 h-8 text-slate-300" />
               </div>
-              <h3 className="text-xl font-black text-slate-800 mb-2 tracking-tight">Không tìm thấy dữ liệu</h3>
-              <p className="text-slate-400 font-medium text-sm text-center max-w-xs leading-relaxed">
-                 {error === "Không thể tải danh sách kết quả." 
-                    ? "Đã xảy ra lỗi kết nối. Vui lòng thử lại sau." 
-                    : "Chưa có bài kiểm tra nào phù hợp với bộ lọc hiện tại."}
+              <h3 className="text-lg font-bold text-slate-800 mb-2">Không tìm thấy dữ liệu</h3>
+              <p className="text-slate-500 text-sm text-center max-w-xs leading-relaxed">
+                {error === "Không thể tải danh sách kết quả."
+                  ? "Đã xảy ra lỗi kết nối. Vui lòng thử lại sau."
+                  : "Chưa có bài kiểm tra nào phù hợp với bộ lọc hiện tại."}
               </p>
             </div>
           )}
@@ -234,9 +234,9 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
       {/* Details Modal - Lazy loaded */}
       {selectedTestId && detailedTest && (
         <Suspense fallback={<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"><div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" /></div>}>
-          <TestDetailModal 
-            test={detailedTest} 
-            onClose={handleCloseModal} 
+          <TestDetailModal
+            test={detailedTest}
+            onClose={handleCloseModal}
             isLoadingDetails={isLoadingDetails}
           />
         </Suspense>

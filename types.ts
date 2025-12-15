@@ -46,6 +46,7 @@ export interface Question {
   answer_option: QuestionAnswer[];
 }
 
+
 export interface TestResultData {
   id: number;
   class_id: number;
@@ -55,6 +56,7 @@ export interface TestResultData {
   time: number;
   passed: number;
   submit_at: string;
+  type?: string; // Type of test: "KT_DAUGIO" (quiz), "BAITAP" (homework), etc.
   questions?: number[];
   test?: Question[]; // Optional detailed data
 }
@@ -98,8 +100,8 @@ export interface UserProfile {
 export interface SystemSettings {
   maintenanceMode: boolean;
   socialLoginOnly: boolean;
-  disableStandardLogin: boolean; 
-  disableLoginMessage: string;   
+  disableStandardLogin: boolean;
+  disableLoginMessage: string;
   portalName: string;      // Tiêu đề chính (VD: Student Portal)
   dashboardTitle: string;  // Tiêu đề phụ (VD: ICTU Dashboard)
   loginTitle: string;

@@ -1,220 +1,246 @@
 <!DOCTYPE html>
 <html lang="vi" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#1e40af" media="(prefers-color-scheme: dark)">
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Xem điểm ICTU - Hệ thống xem điểm trực tuyến dành cho sinh viên Đại học Công nghệ Thông tin và Truyền thông Thái Nguyên" />
-    <meta name="keywords" content="ICTU, xem điểm, sinh viên, đại học, Thái Nguyên, kết quả học tập" />
-    <meta name="author" content="ICTU Student Portal" />
-    <meta name="robots" content="index, follow" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Xem Điểm ICTU - Student Portal" />
-    <meta property="og:description" content="Hệ thống xem điểm trực tuyến dành cho sinh viên ICTU" />
-    <meta property="og:image" content="/og-image.png" />
-    
-    <title>Xem Điểm LMS ICTU</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-              mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1e40af" media="(prefers-color-scheme: dark)">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description"
+    content="Xem điểm ICTU - Hệ thống xem điểm trực tuyến dành cho sinh viên Đại học Công nghệ Thông tin và Truyền thông Thái Nguyên" />
+  <meta name="keywords" content="ICTU, xem điểm, sinh viên, đại học, Thái Nguyên, kết quả học tập" />
+  <meta name="author" content="ICTU Student Portal" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Xem Điểm ICTU - Student Portal" />
+  <meta property="og:description" content="Hệ thống xem điểm trực tuyến dành cho sinh viên ICTU" />
+  <meta property="og:image" content="/og-image.png" />
+
+  <title>Xem Điểm LMS ICTU</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+          },
+          colors: {
+            slate: {
+              850: '#151f32', // Custom lighter dark
+              950: '#020617', // Deep black
             },
-            colors: {
-              slate: {
-                850: '#151f32', // Custom lighter dark
-                950: '#020617', // Deep black
-              },
-              primary: {
-                50: '#eff6ff',
-                100: '#dbeafe',
-                500: '#3b82f6',
-                600: '#2563eb',
-                700: '#1d4ed8',
-              }
-            },
-            animation: {
-              'blob': 'blob 10s infinite',
-              'float': 'float 6s ease-in-out infinite',
-              'shimmer': 'shimmer 2s linear infinite',
-            },
-            keyframes: {
-              blob: {
-                '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                '100%': { transform: 'translate(0px, 0px) scale(1)' },
-              },
-              float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-10px)' },
-              },
-              shimmer: {
-                from: { backgroundPosition: '0 0' },
-                to: { backgroundPosition: '-200% 0' }
-              }
-            },
-            screens: {
-              'xs': '480px',
+            primary: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
             }
+          },
+          animation: {
+            'blob': 'blob 10s infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'shimmer': 'shimmer 2s linear infinite',
+          },
+          keyframes: {
+            blob: {
+              '0%': { transform: 'translate(0px, 0px) scale(1)' },
+              '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+              '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+              '100%': { transform: 'translate(0px, 0px) scale(1)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            shimmer: {
+              from: { backgroundPosition: '0 0' },
+              to: { backgroundPosition: '-200% 0' }
+            }
+          },
+          screens: {
+            'xs': '480px',
           }
         }
       }
-    </script>
-    <style>
-      body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        -webkit-tap-highlight-color: transparent;
-      }
-      
-      /* Global Premium Selection */
-      ::selection {
-        background-color: #3b82f6; /* Blue 500 */
-        color: white;
-      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-      /* --- BEAUTIFUL MINIMALIST SCROLLBAR --- */
-      
-      /* Width & Height - Slim & Sleek */
-      ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-      }
-      
-      /* Track - Transparent to blend with background */
-      ::-webkit-scrollbar-track {
-        background: transparent; 
-      }
-      
-      /* Thumb - Adaptive Colors */
-      ::-webkit-scrollbar-thumb {
-        background-color: #cbd5e1; /* Light Mode: slate-300 */
-        border-radius: 99px; /* Fully rounded */
-        transition: background-color 0.2s ease;
-      }
-      
-      /* Thumb Hover - Light Mode */
-      ::-webkit-scrollbar-thumb:hover {
-        background-color: #94a3b8; /* Light Mode Hover: slate-400 */
-      }
+    /* Global Premium Selection */
+    ::selection {
+      background-color: #3b82f6;
+      /* Blue 500 */
+      color: white;
+    }
 
-      /* Dark Mode Overrides - Using HTML class selector for specificity */
-      html.dark ::-webkit-scrollbar-thumb {
-        background-color: #334155; /* Dark Mode: slate-700 */
-      }
-      
-      html.dark ::-webkit-scrollbar-thumb:hover {
-        background-color: #475569; /* Dark Mode Hover: slate-600 */
-      }
+    /* --- BEAUTIFUL MINIMALIST SCROLLBAR --- */
 
-      /* Firefox Support */
-      * {
-        scrollbar-width: thin;
-        scrollbar-color: #cbd5e1 transparent;
-      }
-      html.dark * {
-        scrollbar-color: #334155 transparent;
-      }
+    /* Width & Height - Slim & Sleek */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
 
-      /* Utility to hide scrollbar but allow scrolling */
-      .no-scrollbar::-webkit-scrollbar {
-          display: none;
-      }
-      .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-      }
-      
-      /* Input autofill fix */
-      input:-webkit-autofill,
-      input:-webkit-autofill:hover, 
-      input:-webkit-autofill:focus, 
-      input:-webkit-autofill:active{
-          -webkit-box-shadow: 0 0 0 30px white inset !important;
-          transition: background-color 5000s ease-in-out 0s;
-      }
-      .dark input:-webkit-autofill,
-      .dark input:-webkit-autofill:hover, 
-      .dark input:-webkit-autofill:focus, 
-      .dark input:-webkit-autofill:active{
-          -webkit-box-shadow: 0 0 0 30px #020617 inset !important;
-          -webkit-text-fill-color: white !important;
-      }
+    /* Track - Transparent to blend with background */
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
 
-      /* Mobile Safe Area */
-      .pb-safe {
-        padding-bottom: env(safe-area-inset-bottom);
-      }
-      .pt-safe {
-        padding-top: env(safe-area-inset-top);
-      }
+    /* Thumb - Adaptive Colors */
+    ::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      /* Light Mode: slate-300 */
+      border-radius: 99px;
+      /* Fully rounded */
+      transition: background-color 0.2s ease;
+    }
 
-      /* Hide native password reveal on Edge/IE to prevent double eye icon */
-      input::-ms-reveal,
-      input::-ms-clear {
-        display: none;
-      }
-      
-      /* Prose styles for HTML content (questions/answers) */
-      .prose {
-        line-height: 1.6;
-      }
-      .prose p {
-        margin: 0.5rem 0;
-      }
-      .prose img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 0.5rem;
-        margin: 0.5rem 0;
-      }
-      .prose figure {
-        margin: 0.5rem 0;
-      }
-      .prose-sm {
-        font-size: 0.875rem;
-      }
-      .dark .prose-invert {
-        color: #e2e8f0;
-      }
-      .prose-p\\:my-0 p {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-      .prose-p\\:my-1 p {
-        margin-top: 0.25rem;
-        margin-bottom: 0.25rem;
-      }
-      .prose-img\\:rounded-lg img {
-        border-radius: 0.5rem;
-      }
-      .prose-img\\:max-w-full img {
-        max-width: 100%;
-      }
-      .prose-img\\:h-auto img {
-        height: auto;
-      }
-      .prose-img\\:my-1 img {
-        margin-top: 0.25rem;
-        margin-bottom: 0.25rem;
-      }
-      .prose-img\\:my-2 img {
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-      }
-    </style>
+    /* Thumb Hover - Light Mode */
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #94a3b8;
+      /* Light Mode Hover: slate-400 */
+    }
+
+    /* Dark Mode Overrides - Using HTML class selector for specificity */
+    html.dark ::-webkit-scrollbar-thumb {
+      background-color: #334155;
+      /* Dark Mode: slate-700 */
+    }
+
+    html.dark ::-webkit-scrollbar-thumb:hover {
+      background-color: #475569;
+      /* Dark Mode Hover: slate-600 */
+    }
+
+    /* Firefox Support */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 transparent;
+    }
+
+    html.dark * {
+      scrollbar-color: #334155 transparent;
+    }
+
+    /* Utility to hide scrollbar but allow scrolling */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Input autofill fix */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 30px white inset !important;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+
+    .dark input:-webkit-autofill,
+    .dark input:-webkit-autofill:hover,
+    .dark input:-webkit-autofill:focus,
+    .dark input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 30px #020617 inset !important;
+      -webkit-text-fill-color: white !important;
+    }
+
+    /* Mobile Safe Area */
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .pt-safe {
+      padding-top: env(safe-area-inset-top);
+    }
+
+    /* Hide native password reveal on Edge/IE to prevent double eye icon */
+    input::-ms-reveal,
+    input::-ms-clear {
+      display: none;
+    }
+
+    /* Prose styles for HTML content (questions/answers) */
+    .prose {
+      line-height: 1.6;
+    }
+
+    .prose p {
+      margin: 0.5rem 0;
+    }
+
+    .prose img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      margin: 0.5rem 0;
+    }
+
+    .prose figure {
+      margin: 0.5rem 0;
+    }
+
+    .prose-sm {
+      font-size: 0.875rem;
+    }
+
+    .dark .prose-invert {
+      color: #e2e8f0;
+    }
+
+    .prose-p\\:my-0 p {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .prose-p\\:my-1 p {
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .prose-img\\:rounded-lg img {
+      border-radius: 0.5rem;
+    }
+
+    .prose-img\\:max-w-full img {
+      max-width: 100%;
+    }
+
+    .prose-img\\:h-auto img {
+      height: auto;
+    }
+
+    .prose-img\\:my-1 img {
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .prose-img\\:my-2 img {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -229,12 +255,14 @@
 }
 </script>
 </head>
-  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300 antialiased overflow-x-hidden selection:bg-blue-500 selection:text-white">
-    <div id="root"></div>
-    
-    <!-- OAuth Redirect Handler (Google & Microsoft) - runs before React -->
-    <script>
-      (function() {
+
+<body
+  class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300 antialiased overflow-x-hidden selection:bg-blue-500 selection:text-white">
+  <div id="root"></div>
+
+  <!-- OAuth Redirect Handler (Google & Microsoft) - runs before React -->
+  <script>
+      (function () {
         // Check if this is an OAuth callback (both Google & Microsoft)
         if (window.location.pathname === '/auth/callback' && window.location.hash) {
           var hash = window.location.hash.substring(1);
@@ -242,14 +270,14 @@
           var accessToken = params.get('access_token');
           var error = params.get('error');
           var state = params.get('state'); // 'microsoft' or undefined (Google)
-          
+
           // Determine provider
           var provider = state === 'microsoft' ? 'microsoft' : 'google';
           var tokenKey = provider + '_oauth_token';
           var errorKey = provider + '_oauth_error';
-          
-          
-          
+
+
+
           if (accessToken || error) {
             // Check if we're in a popup (has opener)
             if (window.opener && !window.opener.closed) {
@@ -267,7 +295,7 @@
                 window.close();
               } catch (e) {
                 // Cross-origin issue, fallback
-                
+
               }
             } else {
               // Direct navigation (not popup) - store and redirect
@@ -284,8 +312,9 @@
           }
         }
       })();
-    </script>
-    
+  </script>
+
   <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>

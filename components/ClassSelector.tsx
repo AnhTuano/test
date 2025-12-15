@@ -1,8 +1,8 @@
 
-
 import React, { useState, useEffect, memo, useMemo, useCallback } from 'react';
 import { ClassStudent, ClassDetails } from '../types';
 import { api } from '../services/api';
+import { useClasses } from '../hooks/useApi';
 import { ClassSelectorSkeleton } from './Skeleton';
 import { Calendar, TrendingUp, BookOpen, ChevronDown, Loader2 } from 'lucide-react';
 
@@ -14,31 +14,16 @@ interface ClassSelectorProps {
 }
 
 const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, initialClassId, onClassSelected }) => {
-  // State
-  const [allClasses, setAllClasses] = useState<ClassStudent[]>([]);
-  const [loadingAll, setLoadingAll] = useState(true);
+  // Use React Query for classes
+  const { data: allClasses = [], isLoading: loadingAll } = useClasses(token, studentId);
 
+  // State
   const [selectedYear, setSelectedYear] = useState<string>("");
   const [selectedSemester, setSelectedSemester] = useState<number | null>(null);
   const [selectedClassId, setSelectedClassId] = useState<number | null>(null);
-  
+
   const [classDetailsList, setClassDetailsList] = useState<ClassDetails[]>([]);
   const [loadingDetails, setLoadingDetails] = useState(false);
-
-  // 1. Load All Classes
-  useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const data = await api.getAllClasses(token, studentId);
-        setAllClasses(data);
-        setLoadingAll(false);
-      } catch (err) {
-        
-        setLoadingAll(false);
-      }
-    };
-    fetchClasses();
-  }, [token, studentId]);
 
   // Pre-calculate hierarchy
   const classHierarchy = useMemo(() => {
@@ -77,7 +62,7 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
         const details = await Promise.all(filtered.slice(0, 10).map(c => api.getClassDetails(token, c.class_id)));
         setClassDetailsList(details.filter((d): d is ClassDetails => d !== null));
       } catch (err) {
-        
+
       } finally {
         setLoadingDetails(false);
       }
@@ -89,17 +74,17 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
   useEffect(() => {
     const syncWithInitialId = async () => {
       if (initialClassId && allClasses.length > 0) {
-         const targetClass = allClasses.find(c => c.class_id === initialClassId);
-         if (targetClass) {
-            setSelectedYear(targetClass.namhoc);
-            setSelectedSemester(targetClass.hocky);
-            const details = await api.getClassDetails(token, initialClassId);
-            if (details) setSelectedClassId(initialClassId);
-         }
+        const targetClass = allClasses.find(c => c.class_id === initialClassId);
+        if (targetClass) {
+          setSelectedYear(targetClass.namhoc);
+          setSelectedSemester(targetClass.hocky);
+          const details = await api.getClassDetails(token, initialClassId);
+          if (details) setSelectedClassId(initialClassId);
+        }
       }
     };
     syncWithInitialId();
-  }, [initialClassId, allClasses, token]); 
+  }, [initialClassId, allClasses, token]);
 
   // Handlers
   const handleYearChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -141,13 +126,13 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
               Học kỳ {selectedSemester} <span className="w-1 h-1 rounded-full bg-slate-400"></span> {selectedYear}
             </p>
           ) : (
-             <p className="text-xs text-slate-400 font-medium mt-1">Vui lòng chọn thông tin bên dưới</p>
+            <p className="text-xs text-slate-400 font-medium mt-1">Vui lòng chọn thông tin bên dưới</p>
           )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        
+
         {/* Year */}
         <div className="relative group">
           <label className="block text-xs font-extrabold text-slate-500 mb-2.5 ml-1 uppercase tracking-wider">Năm học</label>
@@ -171,7 +156,7 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
         <div className="relative group">
           <label className="block text-xs font-extrabold text-slate-500 mb-2.5 ml-1 uppercase tracking-wider">Học kỳ</label>
           <div className="relative">
-             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors pointer-events-none">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors pointer-events-none">
               <TrendingUp className="w-5 h-5" />
             </div>
             <select
@@ -191,7 +176,7 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
         <div className="relative group">
           <label className="block text-xs font-extrabold text-slate-500 mb-2.5 ml-1 uppercase tracking-wider">Môn học</label>
           <div className="relative">
-             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors pointer-events-none">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors pointer-events-none">
               <BookOpen className="w-5 h-5" />
             </div>
             <select
@@ -207,9 +192,9 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
             </select>
             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
               {loadingDetails ? (
-                 <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
+                <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
               ) : (
-                 <ChevronDown className="w-4 h-4 text-slate-400" />
+                <ChevronDown className="w-4 h-4 text-slate-400" />
               )}
             </div>
           </div>
