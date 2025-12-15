@@ -33,7 +33,9 @@ const TestResultCard: React.FC<TestResultCardProps> = ({ test, attemptNumber, on
           {/* Top Info */}
           <div className="w-full flex justify-between items-start mb-3 md:mb-4 z-10 gap-2">
             <div className="flex flex-col gap-1.5 min-w-0">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Tuần {test.week}</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                {test.type === 'KT_DAUGIO' ? `Bài KT của tuần ${test.week}` : `Tuần ${test.week}`}
+              </span>
               {/* Test Type Badge */}
               {test.type === 'KT_DAUGIO' ? (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider bg-amber-100 text-amber-700 border border-amber-200 w-fit">
@@ -52,12 +54,15 @@ const TestResultCard: React.FC<TestResultCardProps> = ({ test, attemptNumber, on
                 </span>
               )}
             </div>
-            <div className={`px-2.5 md:px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border shrink-0 ${isPassed
-              ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
-              : 'bg-red-50 text-red-600 border-red-100'
-              }`}>
-              Lần {attemptNumber}
-            </div>
+            {/* Attempt Number - Only show for regular assignments, not for KT_DAUGIO */}
+            {test.type !== 'KT_DAUGIO' && (
+              <div className={`px-2.5 md:px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border shrink-0 ${isPassed
+                ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
+                : 'bg-red-50 text-red-600 border-red-100'
+                }`}>
+                Lần {attemptNumber}
+              </div>
+            )}
           </div>
 
           {/* Score Center */}
@@ -67,16 +72,19 @@ const TestResultCard: React.FC<TestResultCardProps> = ({ test, attemptNumber, on
             </div>
           </div>
 
-          {/* Bottom Status */}
-          <div className="w-full mt-4 flex items-center justify-center z-10">
-            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${isPassed
-              ? 'bg-emerald-100 text-emerald-700'
-              : 'bg-red-100 text-red-700'
-              }`}>
-              {isPassed ? <CheckCircle className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
-              {isPassed ? 'ĐẠT' : 'CHƯA ĐẠT'}
+
+          {/* Bottom Status - Only show for regular assignments, not for KT_DAUGIO */}
+          {test.type !== 'KT_DAUGIO' && (
+            <div className="w-full mt-4 flex items-center justify-center z-10">
+              <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${isPassed
+                ? 'bg-emerald-100 text-emerald-700'
+                : 'bg-red-100 text-red-700'
+                }`}>
+                {isPassed ? <CheckCircle className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
+                {isPassed ? 'ĐẠT' : 'CHƯA ĐẠT'}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Hover Decor */}
           <div className={`absolute -bottom-10 -right-10 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-40 transition-opacity duration-500 ${isPassed ? 'bg-emerald-400' : 'bg-red-400'
