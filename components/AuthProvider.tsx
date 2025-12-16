@@ -2,11 +2,11 @@
 import React, { createContext, useContext, useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { UserRole, UserProfile, DeviceInfo } from '../types';
 import { api } from '../services/api';
-import { 
-  generateDeviceFingerprint, 
-  saveDeviceFingerprint, 
+import {
+  generateDeviceFingerprint,
+  saveDeviceFingerprint,
   clearDeviceFingerprint,
-  getDeviceInfo 
+  getDeviceInfo
 } from '../utils/deviceManager';
 import { getClientIP } from '../utils/getClientIP';
 import { APP_VERSION } from '../utils/requestSignature';
@@ -71,9 +71,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const checkAuthStatus = async () => {
       // Check app version and clear cache if needed
       const storedVersion = localStorage.getItem('app_version');
-      
+
       if (storedVersion !== APP_VERSION) {
-        
+
         Object.values(STORAGE_KEYS).forEach(key => {
           localStorage.removeItem(key);
         });
@@ -106,15 +106,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           // Fetch profile
           const user = await api.getProfile(storedToken);
           if (user) {
-            setProfile(user);
+            // Try to get role from Supabase database
+            let userRole = storedRole as UserRole;
+            try {
+              const { isSupabaseConfigured, db: supabaseDb } = await import('../services/supabase');
+              if (isSupabaseConfigured()) {
+                const dbProfile = await supabaseDb.getUserProfile(username);
+                if (dbProfile && dbProfile.role) {
+                  userRole = dbProfile.role as UserRole;
+                  // Update localStorage with latest role from DB
+                  localStorage.setItem(STORAGE_KEYS.role, userRole);
+                }
+              }
+            } catch (error) {
+              // Ignore Supabase errors, use stored role
+            }
+
+            // Set profile with role from database
+            const profileWithRole = { ...user, role: userRole };
+            setProfile(profileWithRole);
             setToken(storedToken);
-            setRole(storedRole as UserRole);
+            setRole(userRole);
             setIsLoggedIn(true);
           } else {
             clearAuthData();
           }
         } catch (error) {
-          
+
           clearAuthData();
         }
       } else {
@@ -240,7 +258,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = useCallback(async (username: string, password?: string) => {
     try {
       const { response, role, sessionId, profile: userProfile } = await api.login(username, password);
-      
+
       if (!userProfile) throw new Error("Không thể tải thông tin người dùng");
 
       // Generate device fingerprint
@@ -258,8 +276,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem(STORAGE_KEYS.sessionId, sessionId);
       localStorage.setItem('ictu_student_id', userProfile.id.toString());
 
+      // Update profile with correct role
+      const profileWithRole = { ...userProfile, role };
+
       setToken(response.token);
-      setProfile(userProfile);
+      setProfile(profileWithRole);
       setRole(role);
       setIsLoggedIn(true);
       setLogoutMessage(null);
@@ -267,21 +288,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Log Activity with device fingerprint
       getClientIP().then(clientIP => {
         api.logLoginActivity({
-            username: userProfile.username,
-            studentName: userProfile.full_name,
-            className: userProfile.class_name,
-            department: userProfile.department,
-            ip_address: clientIP,
-            device: `${devInfo.device} - ${devInfo.browser}`,
-            browser: devInfo.browser,
-            userAgent: navigator.userAgent,
-            deviceFingerprint: fingerprint,
-            sessionId: sessionId
+          username: userProfile.username,
+          studentName: userProfile.full_name,
+          className: userProfile.class_name,
+          department: userProfile.department,
+          ip_address: clientIP,
+          device: `${devInfo.device} - ${devInfo.browser}`,
+          browser: devInfo.browser,
+          userAgent: navigator.userAgent,
+          deviceFingerprint: fingerprint,
+          sessionId: sessionId
         }).catch(console.error);
       });
 
     } catch (err: any) {
-      
+
       throw err;
     }
   }, []);
@@ -289,7 +310,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = useCallback(async (message?: string) => {
     const username = localStorage.getItem(STORAGE_KEYS.username);
     const sessionId = localStorage.getItem(STORAGE_KEYS.sessionId);
-    
+
     if (username && sessionId) {
       try {
         await api.logout(username, sessionId);
@@ -299,7 +320,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     clearAuthData();
-    
+
     if (message) {
       setLogoutMessage(message);
     }
@@ -319,28 +340,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       try {
         // Try ICTU login-google endpoint with both token and email
-        
+
         const result = await api.loginWithGoogle(accessToken, googleUser.email);
         if (result && result.profile) {
           userProfile = result.profile;
           sessionId = result.sessionId;
           tokenToUse = result.response.token;
           userRole = result.role || UserRole.USER;
-          
+
         }
       } catch (apiError) {
-        
+
       }
 
       // If ICTU API fails, create local session from Google user info
       if (!userProfile) {
-        
+
         const studentCode = extractStudentCode(googleUser.email);
         const inferredInfo = inferStudentInfo(googleUser.email, googleUser.name);
-        
+
         sessionId = `google_${Date.now()}_${Math.random().toString(36).substring(7)}`;
         tokenToUse = `google_token_${accessToken.substring(0, 20)}`;
-        
+
         userProfile = {
           id: parseInt(studentCode.replace(/\D/g, '').slice(-6)) || Date.now(),
           username: studentCode.toLowerCase(),
@@ -355,8 +376,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           google_avatar: googleUser.picture,
           login_method: 'google'
         } as UserProfile;
-        
-        
+
+
       }
 
       // Use username from profile (lowercase for consistency)
@@ -384,8 +405,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem('ictu_student_id', userProfile.id.toString());
       localStorage.setItem('ictu_login_method', 'google');
 
+      // Update profile with correct role
+      const profileWithRole = { ...userProfile, role: userRole };
+
       setToken(tokenToUse);
-      setProfile(userProfile);
+      setProfile(profileWithRole);
       setRole(userRole);
       setIsLoggedIn(true);
       setLogoutMessage(null);
@@ -408,7 +432,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
     } catch (err: any) {
-      
+
       throw err;
     }
   }, []);
@@ -427,28 +451,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       try {
         // Try ICTU login-microsoft endpoint with both token and email
-        
+
         const result = await api.loginWithMicrosoft(accessToken, msUser.email);
         if (result && result.profile) {
           userProfile = result.profile;
           sessionId = result.sessionId;
           tokenToUse = result.response.token;
           userRole = result.role || UserRole.USER;
-          
+
         }
       } catch (apiError) {
-        
+
       }
 
       // If ICTU API fails, create local session from Microsoft user info
       if (!userProfile) {
-        
+
         const studentCode = msExtractStudentCode(msUser.email);
         const inferredInfo = msInferStudentInfo(msUser.email, msUser.name);
-        
+
         sessionId = `microsoft_${Date.now()}_${Math.random().toString(36).substring(7)}`;
         tokenToUse = `microsoft_token_${accessToken.substring(0, 20)}`;
-        
+
         userProfile = {
           id: parseInt(studentCode.replace(/\D/g, '').slice(-6)) || Date.now(),
           username: studentCode.toLowerCase(),
@@ -463,8 +487,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           google_avatar: msUser.picture,
           login_method: 'microsoft'
         } as UserProfile;
-        
-        
+
+
       }
 
       // Use username from profile (lowercase for consistency)
@@ -492,8 +516,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem('ictu_student_id', userProfile.id.toString());
       localStorage.setItem('ictu_login_method', 'microsoft');
 
+      // Update profile with correct role
+      const profileWithRole = { ...userProfile, role: userRole };
+
       setToken(tokenToUse);
-      setProfile(userProfile);
+      setProfile(profileWithRole);
       setRole(userRole);
       setIsLoggedIn(true);
       setLogoutMessage(null);
@@ -516,7 +543,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
     } catch (err: any) {
-      
+
       throw err;
     }
   }, []);

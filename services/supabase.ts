@@ -16,7 +16,7 @@ const getEnv = (key: string): string => {
   } catch (e) {
     // Ignore error
   }
-  
+
   try {
     if (typeof process !== 'undefined' && process.env) {
       return process.env[key] || '';
@@ -47,42 +47,42 @@ export const isAdminConfigured = () => {
 };
 
 if (!isSupabaseConfigured()) {
-  
+
 } else {
-  
+
   if (isAdminConfigured()) {
-    
+
   } else {
-    
+
   }
 }
 
 // Create Supabase client
-export const supabase: SupabaseClient = isSupabaseConfigured() 
+export const supabase: SupabaseClient = isSupabaseConfigured()
   ? createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+    global: {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
       },
-      global: {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      },
-    })
+    },
+  })
   : createClient('https://placeholder.supabase.co', 'placeholder', {
-      auth: { persistSession: false },
-    });
+    auth: { persistSession: false },
+  });
 
 // Admin Supabase client với Service Role Key (bypass RLS)
 export const supabaseAdmin: SupabaseClient = isAdminConfigured()
   ? createClient(supabaseUrl, supabaseServiceRoleKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-    })
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+  })
   : supabase; // Fallback to regular client if no service role key
 
 // Supabase types
@@ -144,7 +144,7 @@ export const db = {
 
   async createSession(data: Omit<UserSession, 'id' | 'created_at' | 'is_active'>): Promise<UserSession | null> {
     if (!isSupabaseConfigured()) {
-      
+
       return null;
     }
 
@@ -154,7 +154,7 @@ export const db = {
         ...data,
         username: data.username.trim().toLowerCase(),
       };
-      
+
       const { data: session, error } = await supabase
         .from('user_sessions')
         .insert(normalizedData)
@@ -163,14 +163,14 @@ export const db = {
       if (error) throw error;
       return session;
     } catch (error) {
-      
+
       return null;
     }
   },
 
   async invalidateAllUserSessions(username: string): Promise<boolean> {
     if (!isSupabaseConfigured()) {
-      
+
       return true;
     }
 
@@ -178,22 +178,22 @@ export const db = {
     const normalizedUsername = username.trim().toLowerCase();
 
     try {
-      
+
       const { data, error } = await supabase
         .from('user_sessions')
         .update({ is_active: false })
         .ilike('username', normalizedUsername)
         .select();
-      
+
       if (error) {
-        
+
         return false;
       }
-      
-      
+
+
       return true;
     } catch (error) {
-      
+
       return false;
     }
   },
@@ -216,129 +216,129 @@ export const db = {
         .limit(1);
 
       if (error) {
-        
+
         return true;
       }
 
       if (!sessions || sessions.length === 0) {
-        
+
         return true;
       }
 
       const activeSession = sessions[0];
       if (activeSession.session_id === sessionId) {
-        
+
         return true;
       } else {
-        
+
         return false;
       }
     } catch (error) {
-      
+
       return true;
     }
   },
 
   async isUserBlocked(username: string): Promise<{ blocked: boolean; reason?: string }> {
     if (!isSupabaseConfigured()) {
-      
+
       return { blocked: false };
     }
 
     try {
       // Normalize username to lowercase for comparison
       const normalizedUsername = username.toLowerCase();
-      
-      
+
+
       const { data, error } = await supabase
         .from('blocked_users')
         .select('reason, username')
         .ilike('username', normalizedUsername)
         .maybeSingle();
-      
+
       if (error) {
-        
+
         return { blocked: false };
       }
-      
+
       if (!data) {
-        
+
         return { blocked: false };
       }
-      
-      
+
+
       return { blocked: true, reason: data.reason };
     } catch (error) {
-      
+
       return { blocked: false };
     }
   },
 
   async blockUser(username: string, reason: string, blockedBy: string): Promise<boolean> {
     if (!isSupabaseConfigured()) {
-      
+
       return true;
     }
 
     try {
       // Normalize username to lowercase
       const normalizedUsername = username.toLowerCase();
-      
-      
+
+
       const { error } = await supabase
         .from('blocked_users')
-        .insert({ 
-          username: normalizedUsername, 
-          reason, 
+        .insert({
+          username: normalizedUsername,
+          reason,
           blocked_by: blockedBy,
           blocked_at: new Date().toISOString()
         });
-      
+
       if (error) {
-        
+
         return false;
       }
-      
-      
+
+
       return true;
     } catch (error) {
-      
+
       return false;
     }
   },
 
   async unblockUser(username: string): Promise<boolean> {
     if (!isSupabaseConfigured()) {
-      
+
       return true;
     }
 
     try {
       // Normalize username to lowercase
       const normalizedUsername = username.toLowerCase();
-      
-      
+
+
       const { error } = await supabase
         .from('blocked_users')
         .delete()
         .ilike('username', normalizedUsername);
-      
+
       if (error) {
-        
+
         return false;
       }
-      
-      
+
+
       return true;
     } catch (error) {
-      
+
       return false;
     }
   },
 
   async logLoginActivity(data: Partial<SupabaseLoginActivity>): Promise<boolean> {
     if (!isSupabaseConfigured()) {
-      
+
       return true;
     }
 
@@ -346,7 +346,7 @@ export const db = {
       const insertData: any = {
         login_at: new Date().toISOString()
       };
-      
+
       if (data.username) insertData.username = data.username;
       if (data.student_name) insertData.student_name = data.student_name;
       if (data.class_name) insertData.class_name = data.class_name;
@@ -357,23 +357,23 @@ export const db = {
       if (data.user_agent) insertData.user_agent = data.user_agent;
       if (data.device_fingerprint) insertData.device_fingerprint = data.device_fingerprint;
       if (data.session_id) insertData.session_id = data.session_id;
-      
+
       const { error } = await supabase.from('login_activities').insert(insertData);
-      
+
       if (error) {
-        
+
         return false;
       }
       return true;
     } catch (error) {
-      
+
       return false;
     }
   },
 
   async cacheUserProfile(data: Partial<SupabaseUserProfile>): Promise<boolean> {
     if (!isSupabaseConfigured()) {
-      
+
       return true;
     }
 
@@ -388,7 +388,7 @@ export const db = {
         const updateData: any = {
           cached_at: new Date().toISOString()
         };
-        
+
         if (data.student_id !== undefined) updateData.student_id = data.student_id;
         if (data.student_code) updateData.student_code = data.student_code;
         if (data.full_name) updateData.full_name = data.full_name;
@@ -400,14 +400,14 @@ export const db = {
         if (data.gender) updateData.gender = data.gender;
         if (data.khoadaotao) updateData.khoadaotao = data.khoadaotao;
         if (data.role) updateData.role = data.role;
-        
+
         const { error } = await supabase
           .from('user_profiles')
           .update(updateData)
           .eq('id', existing.id);
-        
+
         if (error) {
-          
+
           return false;
         }
         return true;
@@ -416,7 +416,7 @@ export const db = {
           username: data.username,
           cached_at: new Date().toISOString()
         };
-        
+
         if (data.student_id !== undefined) insertData.student_id = data.student_id;
         if (data.student_code) insertData.student_code = data.student_code;
         if (data.full_name) insertData.full_name = data.full_name;
@@ -428,10 +428,10 @@ export const db = {
         if (data.gender) insertData.gender = data.gender;
         if (data.khoadaotao) insertData.khoadaotao = data.khoadaotao;
         if (data.role) insertData.role = data.role;
-        
+
         const { error } = await supabase.from('user_profiles').insert(insertData);
         if (error) {
-          
+
           return false;
         }
         return true;
@@ -443,7 +443,7 @@ export const db = {
 
   async getAllUsers(): Promise<SupabaseUserProfile[]> {
     if (!isSupabaseConfigured()) {
-      
+
       return [];
     }
 
@@ -456,6 +456,25 @@ export const db = {
       return data as SupabaseUserProfile[];
     } catch {
       return [];
+    }
+  },
+
+  async getUserProfile(username: string): Promise<SupabaseUserProfile | null> {
+    if (!isSupabaseConfigured()) {
+      return null;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('username', username.toLowerCase())
+        .maybeSingle();
+
+      if (error || !data) return null;
+      return data as SupabaseUserProfile;
+    } catch {
+      return null;
     }
   },
 
@@ -508,10 +527,10 @@ export const db = {
         }, {
           onConflict: 'username,test_id'
         });
-      
+
       return !error;
     } catch (error) {
-      
+
       return false;
     }
   },
@@ -541,7 +560,7 @@ export const db = {
         .limit(20);
 
       const gradesByClass = new Map<string, { score: number; week: number }>();
-      
+
       if (grades) {
         grades.forEach(g => {
           const existing = gradesByClass.get(g.class_name);
@@ -569,7 +588,7 @@ export const db = {
         recentGrades
       };
     } catch (error) {
-      
+
       return { gpa: 0, totalTests: 0, passRate: 0, recentGrades: [] };
     }
   },

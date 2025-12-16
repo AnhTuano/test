@@ -20,6 +20,7 @@ interface TestResultsDisplayProps {
 
 const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId, className }) => {
   const { profile } = useAuth();
+  const userRole = profile?.role || 'USER';
   const [results, setResults] = useState<TestResultData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -88,6 +89,12 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
   // 4. Filtered List
   const displayResults = useMemo(() => {
     let res = processedResults;
+
+    // Hide KT_DAUGIO (15-minute tests) from regular users
+    if (userRole === 'USER') {
+      res = res.filter(r => r.type !== 'KT_DAUGIO');
+    }
+
     if (selectedWeek !== 'all') {
       res = res.filter(r => r.week === selectedWeek);
     }
@@ -96,7 +103,7 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
       if (a.week !== b.week) return b.week - a.week;
       return b.attempt - a.attempt;
     });
-  }, [processedResults, selectedWeek]);
+  }, [processedResults, selectedWeek, userRole]);
 
 
   // Handlers
@@ -108,6 +115,13 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
 
     // Tìm test từ danh sách đã có để mở modal ngay lập tức
     const basicTest = processedResults.find(r => r.id === testId);
+
+    // Block regular users from viewing KT_DAUGIO details
+    if (basicTest && basicTest.type === 'KT_DAUGIO' && userRole === 'USER') {
+      setError('Bạn không có quyền xem chi tiết bài kiểm tra này.');
+      return;
+    }
+
     if (basicTest) {
       // Mở modal ngay với dữ liệu cơ bản (không có chi tiết câu hỏi)
       setDetailedTest(basicTest);
@@ -212,6 +226,7 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
                   test={test}
                   attemptNumber={test.attempt}
                   onClick={() => handleViewDetails(test.id)}
+                  userRole={userRole}
                 />
               ))}
             </div>
@@ -238,6 +253,7 @@ const TestResultsDisplay: React.FC<TestResultsDisplayProps> = ({ token, classId,
             test={detailedTest}
             onClose={handleCloseModal}
             isLoadingDetails={isLoadingDetails}
+            userRole={userRole}
           />
         </Suspense>
       )}

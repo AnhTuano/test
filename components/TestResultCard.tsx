@@ -8,9 +8,10 @@ interface TestResultCardProps {
   test: TestResultData;
   attemptNumber: number;
   onClick: () => void;
+  userRole?: string;
 }
 
-const TestResultCard: React.FC<TestResultCardProps> = ({ test, attemptNumber, onClick }) => {
+const TestResultCard: React.FC<TestResultCardProps> = ({ test, attemptNumber, onClick, userRole }) => {
   // Ensure av is a valid number
   const score = typeof test.av === 'number' && !isNaN(test.av) ? test.av : 0;
   // Logic: Score >= 8.0 is Passed
