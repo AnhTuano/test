@@ -370,6 +370,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           email: googleUser.email,
           class_name: inferredInfo.className,
           department: inferredInfo.department,
+          role: UserRole.USER,
+          status: 'active',
           course: inferredInfo.course,
           gender: inferredInfo.gender,
           birthday: inferredInfo.birthday,
@@ -426,8 +428,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           browser: devInfo.browser,
           userAgent: navigator.userAgent,
           deviceFingerprint: fingerprint,
-          sessionId: sessionId,
-          loginMethod: 'google'
+          sessionId: sessionId
         }).catch(console.error);
       });
 
@@ -481,6 +482,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           email: msUser.email,
           class_name: inferredInfo.className,
           department: inferredInfo.department,
+          role: UserRole.USER,
+          status: 'active',
           course: inferredInfo.course,
           gender: inferredInfo.gender,
           birthday: inferredInfo.birthday,
@@ -537,8 +540,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           browser: devInfo.browser,
           userAgent: navigator.userAgent,
           deviceFingerprint: fingerprint,
-          sessionId: sessionId,
-          loginMethod: 'microsoft'
+          sessionId: sessionId
         }).catch(console.error);
       });
 
