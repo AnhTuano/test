@@ -26,8 +26,11 @@ const AuthenticatedImage: React.FC<AuthenticatedImageProps> = ({ imageId, alt = 
                 setLoading(true);
                 setError(false);
 
-                // Use backend server (works in both dev and production)
-                const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+                // Use backend URL from env, or relative path for production (Vercel serverless), or localhost for dev
+                const envBackendUrl = import.meta.env.VITE_BACKEND_URL;
+                const BACKEND_URL = envBackendUrl !== undefined && envBackendUrl !== ''
+                    ? envBackendUrl
+                    : (import.meta.env.PROD ? '' : 'http://localhost:3001');
                 const signature = getRequestSignature('GET', {});
                 const response = await fetch(`${BACKEND_URL}/api/media/${imageId}`, {
                     headers: {
