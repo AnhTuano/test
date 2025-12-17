@@ -25,15 +25,11 @@ const AuthenticatedImage: React.FC<AuthenticatedImageProps> = ({ imageId, alt = 
                 setLoading(true);
                 setError(false);
 
-                // Fetch from LMS with Bearer token
-                const response = await fetch(`https://apps.ictu.edu.vn:9087/ionline/api/media/${imageId}`, {
+                // Use Edge Function proxy (works in production)
+                const response = await fetch(`/api/media/${imageId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Accept': 'image/*',
-                        'Origin': 'https://lms.ictu.edu.vn',
-                        'Referer': 'https://lms.ictu.edu.vn/',
                     },
-                    mode: 'cors',
                 });
 
                 if (!response.ok) {
