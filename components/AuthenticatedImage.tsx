@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthProvider';
+import { getRequestSignature, APP_ID } from '../utils/requestSignature';
 
 interface AuthenticatedImageProps {
     imageId: string;
@@ -25,10 +26,13 @@ const AuthenticatedImage: React.FC<AuthenticatedImageProps> = ({ imageId, alt = 
                 setLoading(true);
                 setError(false);
 
-                // Use Edge Function proxy (works in production)
+                // Use Edge Function proxy with all required headers
+                const signature = getRequestSignature('GET', {});
                 const response = await fetch(`/api/media/${imageId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
+                        'X-APP-ID': APP_ID,
+                        'x-request-signature': signature,
                     },
                 });
 
