@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect, memo, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { TestResultData } from '../types';
+import { TestResultData, SystemSettings } from '../types';
 import { X, CheckCircle, AlertCircle, Award, BookOpen, Download, Loader2 } from 'lucide-react';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle } from 'docx';
+import { api } from '../services/api';
 
 interface TestDetailModalProps {
   test: TestResultData;
@@ -89,9 +90,23 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
   const isPassed = score >= 8;
   const isHighScore = score >= 9;
   const [isExporting, setIsExporting] = useState(false);
+  const [settings, setSettings] = useState<SystemSettings | null>(null);
 
   // Block regular users from viewing KT_DAUGIO details
   const isBlocked = test.type === 'KT_DAUGIO' && userRole === 'USER';
+
+  // Fetch system settings for portal name
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const data = await api.getPublicSettings();
+        setSettings(data);
+      } catch (error) {
+        // Ignore error, use default
+      }
+    };
+    fetchSettings();
+  }, []);
 
   // Format date safely with Vietnam Timezone
   const submitDateStr = new Date(test.submit_at).toLocaleDateString('vi-VN', {
@@ -132,7 +147,7 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
             }),
             // Subtitle
             new Paragraph({
-              text: `Tuần ${test.week} - Ngày nộp: ${submitDateStr}`,
+              text: `Tuần ${test.week}`,
               alignment: AlignmentType.CENTER,
               spacing: { after: 400 },
             }),
@@ -207,11 +222,11 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
 
             // Footer
             new Paragraph({
-              text: "Xuất từ hệ thống Student Portal",
+              text: `Xuất từ hệ thống ${settings?.portalName || 'Student Portal'}`,
               alignment: AlignmentType.CENTER,
               spacing: { before: 600 },
               children: [
-                new TextRun({ text: "Xuất từ hệ thống Student Portal", size: 16, color: "888888" })
+                new TextRun({ text: `Xuất từ hệ thống ${settings?.portalName || 'Student Portal'}`, size: 16, color: "888888" })
               ]
             })
           ],
