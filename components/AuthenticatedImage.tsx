@@ -26,9 +26,10 @@ const AuthenticatedImage: React.FC<AuthenticatedImageProps> = ({ imageId, alt = 
                 setLoading(true);
                 setError(false);
 
-                // Use Edge Function proxy with all required headers
+                // Use backend server (works in both dev and production)
+                const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
                 const signature = getRequestSignature('GET', {});
-                const response = await fetch(`/api/media/${imageId}`, {
+                const response = await fetch(`${BACKEND_URL}/api/media/${imageId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'X-APP-ID': APP_ID,
