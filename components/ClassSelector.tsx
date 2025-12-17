@@ -70,21 +70,25 @@ const ClassSelector: React.FC<ClassSelectorProps> = memo(({ token, studentId, in
     fetchClassDetails();
   }, [selectedYear, selectedSemester, allClasses, token]);
 
-  // Initial ID Sync
+  // Initial ID Sync - only run once
+  const [synced, setSynced] = useState(false);
   useEffect(() => {
     const syncWithInitialId = async () => {
-      if (initialClassId && allClasses.length > 0) {
+      if (initialClassId && allClasses.length > 0 && !synced) {
         const targetClass = allClasses.find(c => c.class_id === initialClassId);
         if (targetClass) {
           setSelectedYear(targetClass.namhoc);
           setSelectedSemester(targetClass.hocky);
           const details = await api.getClassDetails(token, initialClassId);
-          if (details) setSelectedClassId(initialClassId);
+          if (details) {
+            setSelectedClassId(initialClassId);
+            setSynced(true);
+          }
         }
       }
     };
     syncWithInitialId();
-  }, [initialClassId, allClasses, token]);
+  }, [initialClassId, allClasses, token, synced]);
 
   // Handlers
   const handleYearChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {

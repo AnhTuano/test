@@ -2,6 +2,7 @@
 import React, { useState, useEffect, memo, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { TestResultData, SystemSettings } from '../types';
+import HtmlContent from './HtmlContent';
 import { X, CheckCircle, AlertCircle, Award, BookOpen, Download, Loader2 } from 'lucide-react';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle } from 'docx';
 import { api } from '../services/api';
@@ -13,28 +14,7 @@ interface TestDetailModalProps {
   userRole?: string;
 }
 
-// ICTU Image URL base
-const ICTU_IMAGE_BASE = 'https://apps.ictu.edu.vn:9087/ionline/api/media/';
 
-// Helper to process HTML content and fix image URLs
-const processHtmlContent = (html: string): string => {
-  if (!html) return '';
-
-  // Replace image src with full ICTU URL
-  // Pattern: <img src="318664" alt="318664|serverAws">
-  let processed = html.replace(
-    /<img\s+src="(\d+)"\s+alt="[^"]*"/g,
-    `<img src="${ICTU_IMAGE_BASE}$1" alt="Hình ảnh câu hỏi" class="max-w-full h-auto rounded-lg my-2"`
-  );
-
-  // Also handle other image patterns
-  processed = processed.replace(
-    /src="(\d+)"/g,
-    `src="${ICTU_IMAGE_BASE}$1"`
-  );
-
-  return processed;
-};
 
 // Helper to convert number id to letter (1 → A, 2 → B, etc.)
 const idToLetter = (id: string | number): string => {
@@ -414,11 +394,12 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
                     return (
                       <div
                         key={q.id || idx}
-                        className="bg-white border border-slate-200/50 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:scale-[1.01] transition-all duration-200 animate-in slide-in-from-left-4 fade-in"
+                        className="bg-white border border-slate-200/50 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200 animate-in slide-in-from-left-4 fade-in"
                         style={{
-                          animationDelay: `${idx * 50}ms`,
-                          animationDuration: '300ms',
-                          animationFillMode: 'both'
+                          animationDelay: `${Math.min(idx * 30, 300)}ms`,
+                          animationDuration: '250ms',
+                          animationFillMode: 'both',
+                          willChange: idx < 5 ? 'transform, opacity' : 'auto'
                         }}
                       >
                         <div className="flex gap-4 mb-5">
@@ -426,11 +407,10 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
                             {questionNum}
                           </span>
                           <div className="flex-1">
-                            {/* Render HTML content properly */}
-                            <div
-                              className="text-slate-900 font-semibold leading-relaxed text-base prose prose-sm max-w-none
-                                            prose-p:my-1 prose-img:rounded-lg prose-img:max-w-full prose-img:h-auto prose-img:my-2"
-                              dangerouslySetInnerHTML={{ __html: processHtmlContent(q.question_direction) }}
+                            {/* Render with AuthenticatedImage for blob URLs */}
+                            <HtmlContent
+                              html={q.question_direction}
+                              className="text-slate-900 font-semibold leading-relaxed text-base prose prose-sm max-w-none prose-p:my-1"
                             />
                           </div>
                         </div>
@@ -449,10 +429,10 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
                                   <div className="w-7 h-7 rounded-full flex items-center justify-center border text-xs font-bold transition-all flex-shrink-0 bg-slate-50 border-slate-300 text-slate-600 group-hover:border-blue-400 group-hover:bg-blue-50 group-hover:text-blue-700">
                                     {optionLetter}
                                   </div>
-                                  {/* Render answer HTML content */}
-                                  <span
+                                  {/* Render with AuthenticatedImage for blob URLs */}
+                                  <HtmlContent
+                                    html={opt.value}
                                     className="leading-snug text-slate-700 text-sm"
-                                    dangerouslySetInnerHTML={{ __html: processHtmlContent(opt.value) }}
                                   />
                                 </div>
                               </div>
