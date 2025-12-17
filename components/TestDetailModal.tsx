@@ -91,6 +91,7 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
   const isHighScore = score >= 9;
   const [isExporting, setIsExporting] = useState(false);
   const [settings, setSettings] = useState<SystemSettings | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   // Block regular users from viewing KT_DAUGIO details
   const isBlocked = test.type === 'KT_DAUGIO' && userRole === 'USER';
@@ -107,6 +108,15 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
     };
     fetchSettings();
   }, []);
+
+  // Optimize confetti - auto hide after 3s
+  useEffect(() => {
+    if (isPassed) {
+      setShowConfetti(true);
+      const timer = setTimeout(() => setShowConfetti(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isPassed]);
 
   // Format date safely with Vietnam Timezone
   const submitDateStr = new Date(test.submit_at).toLocaleDateString('vi-VN', {
@@ -255,11 +265,11 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
   };
 
   const content = (
-    <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-4 bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-200">
       <style>{confettiStyles}</style>
 
-      {/* Confetti Effect for High Score */}
-      {isPassed && (
+      {/* Confetti Effect for High Score - Auto hide after 3s */}
+      {showConfetti && (
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
           {[...Array(20)].map((_, i) => (
             <div
@@ -276,10 +286,10 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
         </div>
       )}
 
-      <div className="bg-white w-full md:max-w-3xl h-full md:h-auto md:max-h-[85vh] md:rounded-[2rem] shadow-2xl flex flex-col relative transition-colors z-10 animate-in slide-in-from-bottom-full md:zoom-in-95 duration-300 border-x-0 md:border border-slate-100">
+      <div className="bg-white w-full md:max-w-3xl h-full md:h-auto md:max-h-[85vh] md:rounded-[2rem] shadow-2xl flex flex-col relative transition-all z-10 animate-in slide-in-from-bottom-4 md:zoom-in-98 fade-in duration-400 ease-out border-x-0 md:border border-slate-100">
 
         {/* Header - Fixed */}
-        <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-white z-10 transition-colors shrink-0">
+        <div className="sticky top-0 p-5 border-b border-slate-100 flex justify-between items-center bg-white/95 backdrop-blur-lg z-20 transition-all shrink-0">
           <div className="flex items-center gap-3">
             <div className={`p-2 rounded-xl ${isPassed ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
               <BookOpen className="w-6 h-6" />
@@ -293,7 +303,7 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
             <button
               onClick={handleExportDocx}
               disabled={isExporting}
-              className="p-2 hover:bg-blue-50 text-blue-600 rounded-full transition-colors flex items-center gap-2 disabled:opacity-50"
+              className="p-2 hover:bg-blue-50 text-blue-600 rounded-full transition-all active:scale-95 flex items-center gap-2 disabled:opacity-50"
               title="Tải về file Word (.docx)"
             >
               {isExporting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
@@ -302,7 +312,7 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
             <div className="h-6 w-px bg-slate-200 mx-1"></div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+              className="p-2 hover:bg-slate-100 rounded-full transition-all active:scale-95 text-slate-400 hover:text-slate-600"
             >
               <X className="w-6 h-6" />
             </button>
@@ -310,7 +320,7 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto flex-1 bg-slate-50/50 p-6 transition-colors">
+        <div className="overflow-y-auto scroll-smooth flex-1 bg-slate-50/50 p-6 transition-colors" style={{ WebkitOverflowScrolling: 'touch' }}>
 
           {isBlocked ? (
             /* Access Denied Message for Regular Users */
@@ -332,7 +342,7 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
           ) : (
             <>
               {/* Score Overview Card */}
-              <div className={`rounded-3xl p-8 text-white shadow-lg mb-8 relative overflow-hidden transition-all duration-500 ${isPassed ? 'bg-gradient-to-br from-blue-600 to-indigo-700 shadow-blue-500/20' : 'bg-gradient-to-br from-red-500 to-pink-600 shadow-red-500/20'}`}>
+              <div className={`rounded-3xl p-8 text-white shadow-xl mb-6 relative overflow-hidden transition-all duration-500 ${isPassed ? 'bg-gradient-to-br from-blue-600 to-indigo-700 shadow-blue-500/10' : 'bg-gradient-to-br from-red-500 to-pink-600 shadow-red-500/10'}`}>
                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
                   <div className="text-center md:text-left">
                     <div className="flex items-center gap-2 mb-1 justify-center md:justify-start opacity-90">
@@ -361,7 +371,7 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
               </div>
 
               {/* Questions Section */}
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div className="flex items-center justify-between px-1">
                   <h4 className="text-lg font-bold text-slate-800">Chi tiết bài làm</h4>
                   <span className="text-xs font-semibold text-slate-500 bg-white border border-slate-200 px-3 py-1 rounded-full shadow-sm">
@@ -402,22 +412,30 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
                     const questionNum = q.question_number > 0 ? q.question_number : idx + 1;
 
                     return (
-                      <div key={q.id || idx} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div
+                        key={q.id || idx}
+                        className="bg-white border border-slate-200/50 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:scale-[1.01] transition-all duration-200 animate-in slide-in-from-left-4 fade-in"
+                        style={{
+                          animationDelay: `${idx * 50}ms`,
+                          animationDuration: '300ms',
+                          animationFillMode: 'both'
+                        }}
+                      >
                         <div className="flex gap-4 mb-5">
-                          <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-600 font-bold rounded-lg text-sm border border-slate-200">
+                          <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 text-blue-700 font-bold rounded-lg text-sm border border-blue-100 shadow-sm">
                             {questionNum}
                           </span>
                           <div className="flex-1">
                             {/* Render HTML content properly */}
                             <div
-                              className="text-slate-800 font-medium leading-relaxed text-base prose prose-sm max-w-none
+                              className="text-slate-900 font-semibold leading-relaxed text-base prose prose-sm max-w-none
                                             prose-p:my-1 prose-img:rounded-lg prose-img:max-w-full prose-img:h-auto prose-img:my-2"
                               dangerouslySetInnerHTML={{ __html: processHtmlContent(q.question_direction) }}
                             />
                           </div>
                         </div>
 
-                        <div className="space-y-3 pl-0 md:pl-12">
+                        <div className="space-y-2 pl-0 md:pl-12">
                           {q.answer_option.map((opt, optIdx) => {
                             // Chuyển id thành chữ cái
                             const optionLetter = idToLetter(opt.id);
@@ -425,15 +443,15 @@ const TestDetailModal: React.FC<TestDetailModalProps> = ({ test, onClose, isLoad
                             return (
                               <div
                                 key={opt.id}
-                                className="relative group p-4 rounded-xl text-sm border transition-all duration-200 flex items-center justify-between bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50"
+                                className="relative group p-4 rounded-xl text-sm border transition-all duration-150 flex items-center justify-between bg-white border-slate-200 hover:border-blue-200 hover:bg-blue-50/50 hover:shadow-sm"
                               >
                                 <div className="flex items-center gap-4">
-                                  <div className="w-7 h-7 rounded-full flex items-center justify-center border text-xs font-bold transition-colors flex-shrink-0 bg-slate-50 border-slate-200 text-slate-500 group-hover:border-slate-300">
+                                  <div className="w-7 h-7 rounded-full flex items-center justify-center border text-xs font-bold transition-all flex-shrink-0 bg-slate-50 border-slate-300 text-slate-600 group-hover:border-blue-400 group-hover:bg-blue-50 group-hover:text-blue-700">
                                     {optionLetter}
                                   </div>
                                   {/* Render answer HTML content */}
                                   <span
-                                    className="leading-snug text-slate-700"
+                                    className="leading-snug text-slate-700 text-sm"
                                     dangerouslySetInnerHTML={{ __html: processHtmlContent(opt.value) }}
                                   />
                                 </div>
